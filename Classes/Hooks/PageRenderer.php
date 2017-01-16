@@ -54,7 +54,7 @@ class PageRenderer {
 			$pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTourController');
 			$pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTourParser');
 			// Add language labels
-			$pageRenderer->addInlineLanguageLabelFile('EXT:guide/Resources/Private/Language/BootstrapTour.xlf');
+			$pageRenderer->addInlineLanguageLabelFile('EXT:guide/Resources/Private/Language/locallang.xlf');
 			// Add required styles
 			$cssPath = $pageRenderer->backPath . ExtensionManagementUtility::extRelPath('guide') . 'Resources/Public/Stylesheets/';
 			$pageRenderer->addCssFile($cssPath . 'bootstrap-tour.css', 'stylesheet', 'screen');

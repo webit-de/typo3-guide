@@ -29,6 +29,7 @@ namespace Tx\Guide\Utility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Backend\Domain\Repository\Module\BackendModuleRepository;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -62,6 +63,10 @@ class GuideUtility {
 		$tours = $this->getBackendUserAuthentication()->getTSConfig(
 			'mod.guide.tours', BackendUtility::getPagesTSconfig(0)
 		);
+		$toursUser = $this->getBackendUserAuthentication()->getTSConfig(
+			'mod.guide.tours'
+		);
+		ArrayUtility::mergeRecursiveWithOverrule($tours, $toursUser);
 		if(isset($tours['properties']) && !empty($tours['properties'])) {
 			// Be sure the TypoScript service is available
 			if (!($this->typoScriptService instanceof TypoScriptService)) {
@@ -166,6 +171,10 @@ class GuideUtility {
 		$steps = $this->getBackendUserAuthentication()->getTSConfig(
 			'mod.guide.tours.' . $tour . '.steps', BackendUtility::getPagesTSconfig(0)
 		);
+		$stepsUser = $this->getBackendUserAuthentication()->getTSConfig(
+			'mod.guide.tours.' . $tour . '.steps'
+		);
+		ArrayUtility::mergeRecursiveWithOverrule($steps, $stepsUser);
 		if(isset($steps['properties']) && !empty($steps['properties'])) {
 			// Be sure the TypoScript service is available
 			if(!($this->typoScriptService instanceof TypoScriptService)) {

@@ -8,7 +8,7 @@ mod.guide.tours.Topbar {
 			selector = #typo3-cms-backend-backend-toolbaritems-shortcuttoolbaritem
 			title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.10.title
 			content = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.10.content
-			placement = right
+			placement = left
 			shown {
 				addClass {
 					selector = #typo3-cms-backend-backend-toolbaritems-shortcuttoolbaritem
@@ -20,7 +20,7 @@ mod.guide.tours.Topbar {
 			selector = #typo3-cms-backend-backend-toolbaritems-clearcachetoolbaritem
 			title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.20.title
 			content = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.20.content
-			placement = right
+			placement = left
 			shown {
 				addClass {
 					selector = #typo3-cms-backend-backend-toolbaritems-clearcachetoolbaritem
@@ -32,7 +32,7 @@ mod.guide.tours.Topbar {
 			selector = #typo3-cms-backend-backend-toolbaritems-helptoolbaritem
 			title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.30.title
 			content = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.30.content
-			placement = right
+			placement = left
 			shown {
 				addClass {
 					selector = #typo3-cms-backend-backend-toolbaritems-helptoolbaritem
@@ -44,7 +44,7 @@ mod.guide.tours.Topbar {
 			selector = #typo3-cms-backend-backend-toolbaritems-systeminformationtoolbaritem
 			title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.40.title
 			content = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.40.content
-			placement = right
+			placement = left
 			shown {
 				addClass {
 					selector = #typo3-cms-backend-backend-toolbaritems-systeminformationtoolbaritem
@@ -56,7 +56,7 @@ mod.guide.tours.Topbar {
 			selector = #typo3-cms-backend-backend-toolbaritems-usertoolbaritem
 			title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.50.title
 			content = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.50.content
-			placement = right
+			placement = left
 			shown {
 				addClass {
 					selector = #typo3-cms-backend-backend-toolbaritems-usertoolbaritem

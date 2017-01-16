@@ -3,29 +3,30 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2014-09-23T15:21:54Z" product-name="guide">
 		<header/>
 		<body>
+			
 			<trans-unit id="tx_guide_tour.title">
 				<source>Page tree tour</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.description">
-				<source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</source>
+				<source>This is a guided tour through the page tree.</source>
 			</trans-unit>
 
 			<trans-unit id="tx_guide_tour.10.title">
 				<source>Page tree</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.10.content">
-				<source>This is the page tree.</source>
+				<source>This is the page tree. In this page tree you will get an overview about all available pages and his structure.</source>
 			</trans-unit>
 			
 			<trans-unit id="tx_guide_tour.20.title">
-				<source>Add page tree nodes</source>
+				<source>Add new pages into the tree</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.20.content">
-				<source>Do something to add new nodes.</source>
+				<source>With this button you're able to add new pages to the page tree.</source>
 			</trans-unit>
 
 			<trans-unit id="tx_guide_tour.30.title">
-				<source>Filter tree nodes</source>
+				<source>Search within the page tree</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.30.content">
 				<source><![CDATA[Here you're able to active a filter field, which allows you to filter the tree.<br />
@@ -33,10 +34,10 @@
 			</trans-unit>
 
 			<trans-unit id="tx_guide_tour.40.title">
-				<source>Refresh tree nodes</source>
+				<source>Refresh the page tree</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.40.content">
-				<source>Reload the whole page tree.</source>
+				<source>This button reloads the whole page tree.</source>
 			</trans-unit>
 
 		</body>

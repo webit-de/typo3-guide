@@ -2,7 +2,7 @@
 <f:layout name="Default" />
 <f:section name="content">
 	<h1><f:translate key="tx_guide_label.headline"/></h1>
-	<f:flashMessages renderMode="div" />
+	<f:flashMessages />
 	<p class="lead"><f:translate key="tx_guide_label.description" /></p>
 	<hr />
 	<h2><f:translate key="tx_guide_label.available_core_guided_tours" /></h2>
@@ -13,6 +13,7 @@
 					<f:if condition="{tour.moduleName} == 'core'">
 						<f:if condition="{tour.name} == 'Tree'">
 							<f:then>
+								<!-- Don't show the TreeTour -->
 							</f:then>
 							<f:else>
 								<f:render partial="Guide/Item" arguments="{_all}" />

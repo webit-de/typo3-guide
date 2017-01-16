@@ -15,6 +15,5 @@ mod.guide.tours.PageModule {
 				step = 0
 			}
 		}
-
 	}
 }
