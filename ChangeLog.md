@@ -1,5 +1,7 @@
 ## Guided tours Change-Log
 
+### 2017-01-18  Thomas Deuling  <typo3@coding.ms>
+*	[TASK] Optimization of strip tags
 
 ### 2017-01-16  Thomas Deuling  <typo3@coding.ms>
 *	[TASK] Mirgation for TYPO3 8.x

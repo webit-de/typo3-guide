@@ -32,6 +32,7 @@ use TYPO3\CMS\Backend\Domain\Repository\Module\BackendModuleRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use \Tx\Guide\Service\SanitizationService;
 
 /**
  * GuideUtility
@@ -190,10 +191,14 @@ class GuideUtility {
 					if(substr($tours[$tour]['steps'][$stepKey]['content'], 0, 4) == 'LLL:') {
 						$tours[$tour]['steps'][$stepKey]['content'] = $this->getLanguageService()->sL($tours[$tour]['steps'][$stepKey]['content']);
 					}
+
+					$tours[$tour]['steps'][$stepKey]['title'] =\Tx\Guide\Service\SanitizationService::sanitizeHtml($tours[$tour]['steps'][$stepKey]['title']);
+					
 					// Strip disallowed tags
 					$allowedTags = '<p><i><u><b><br>';
 					$tours[$tour]['steps'][$stepKey]['title'] = strip_tags($tours[$tour]['steps'][$stepKey]['title']);
-					$tours[$tour]['steps'][$stepKey]['content'] = strip_tags($tours[$tour]['steps'][$stepKey]['content'], $allowedTags);
+					$tours[$tour]['steps'][$stepKey]['content'] = SanitizationService::sanitizeHtml($tours[$tour]['steps'][$stepKey]['content'], $allowedTags);
+					
 				}
 			}
 		}
