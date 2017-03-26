@@ -53,7 +53,9 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
                      */
                     show      :   current.show,
 
-                    shown      :   current.shown,
+					shown      :   current.shown,
+					backdrop: current.backdrop,
+					backdropPadding: current.backdropPadding,
 
 
                     /**
@@ -61,10 +63,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
                      */
                     nextStep    :   current.next,
 
-                    /**
-                     *
-                     */
-                    showArrow   :   current.showArrow != 'false',
+                    showArrow: current.showArrow,
 
 
                     /**

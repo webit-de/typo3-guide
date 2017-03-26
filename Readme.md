@@ -99,6 +99,10 @@ placement = top
 # Disables the arrow on popover.
 # The arrow is displayed by default.
 showArrow = false
+# Enables a backdrop.
+backdrop = false
+# Set a padding for the backdrop
+backdropPadding = 0
 #
 # The following nodes can be used for executing some actions during the tour. 
 #

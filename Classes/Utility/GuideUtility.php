@@ -193,6 +193,26 @@ class GuideUtility
                     $tours[$tour]['steps'][$stepKey]['title'] = strip_tags($tours[$tour]['steps'][$stepKey]['title']);
                     $tours[$tour]['steps'][$stepKey]['content'] = SanitizationService::sanitizeHtml($tours[$tour]['steps'][$stepKey]['content'],
                         $allowedTags);
+
+                    // Reset backdrop
+                    if (!isset($tours[$tour]['steps'][$stepKey]['backdrop'])) {
+                        $tours[$tour]['steps'][$stepKey]['backdrop'] = false;
+                    }
+                    else {
+                        $tours[$tour]['steps'][$stepKey]['backdrop'] = ($tours[$tour]['steps'][$stepKey]['backdrop']=='true');
+                    }
+                    if (!isset($tours[$tour]['steps'][$stepKey]['backdropPadding'])) {
+                        $tours[$tour]['steps'][$stepKey]['backdropPadding'] = 0;
+                    }
+                    else {
+                        $tours[$tour]['steps'][$stepKey]['backdropPadding'] = (int)$tours[$tour]['steps'][$stepKey]['backdropPadding'];
+                    }
+                    if (!isset($tours[$tour]['steps'][$stepKey]['showArrow'])) {
+                        $tours[$tour]['steps'][$stepKey]['showArrow'] = true;
+                    }
+                    else {
+                        $tours[$tour]['steps'][$stepKey]['showArrow'] = ($tours[$tour]['steps'][$stepKey]['showArrow']=='true');
+                    }
                 }
             }
         }
