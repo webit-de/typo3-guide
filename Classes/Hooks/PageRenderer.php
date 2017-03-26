@@ -28,6 +28,8 @@ namespace Tx\Guide\Hooks;
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Class/Function which adds the necessary JS, CSS and language label
@@ -36,30 +38,32 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage tx_guide
  */
-class PageRenderer {
+class PageRenderer
+{
 
-	/**
-	 * wrapper function called by hook (\TYPO3\CMS\Core\Page\PageRenderer->render-preProcess)
-	 *
-	 * @param array $parameters : An array of available parameters
-	 * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer : The parent object that triggered this hook
-	 *
-	 * @return void
-	 */
-	public function addJSCSS($parameters, &$pageRenderer) {
-		$guideUtility = GeneralUtility::makeInstance('Tx\Guide\Utility\GuideUtility');
-		if($guideUtility->isGuidedTourActivated()) {
-			// Add require js modules
-			$pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTour');
-			$pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTourController');
-			$pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTourParser');
-			// Add language labels
-			$pageRenderer->addInlineLanguageLabelFile('EXT:guide/Resources/Private/Language/locallang.xlf');
-			// Add required styles
-			$cssPath = $pageRenderer->backPath . ExtensionManagementUtility::extRelPath('guide') . 'Resources/Public/Stylesheets/';
-			$pageRenderer->addCssFile($cssPath . 'bootstrap-tour.min.css', 'stylesheet', 'screen');
-			$pageRenderer->addCssFile($cssPath . 'bootstrap-tour-custom.css', 'stylesheet', 'screen');
-		}
-	}
+    /**
+     * wrapper function called by hook (\TYPO3\CMS\Core\Page\PageRenderer->render-preProcess)
+     *
+     * @param array $parameters : An array of available parameters
+     * @param \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer : The parent object that triggered this hook
+     *
+     * @return void
+     */
+    public function addJSCSS($parameters, &$pageRenderer)
+    {
+        $guideUtility = GeneralUtility::makeInstance('Tx\Guide\Utility\GuideUtility');
+        if ($guideUtility->isGuidedTourActivated()) {
+            // Add require js modules
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTour');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTourController');
+            $pageRenderer->loadRequireJsModule('TYPO3/CMS/Guide/BootstrapTourParser');
+            // Add language labels
+            $pageRenderer->addInlineLanguageLabelFile('EXT:guide/Resources/Private/Language/locallang.xlf');
+            // Add required styles
+            $cssPath = PathUtility::getAbsoluteWebPath('/typo3conf/ext/guide/Resources/Public/Stylesheets/');
+            $pageRenderer->addCssFile($cssPath . 'bootstrap-tour.min.css', 'stylesheet', 'screen');
+            $pageRenderer->addCssFile($cssPath . 'bootstrap-tour-custom.css', 'stylesheet', 'screen');
+        }
+    }
 
 }
