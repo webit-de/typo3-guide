@@ -1,7 +1,7 @@
 mod.guide.tours.AboutModule {
 	title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourAboutModule.xlf:tx_guide_tour.title
 	description = LLL:EXT:guide/Resources/Private/Language/BootstrapTourAboutModule.xlf:tx_guide_tour.description
-	moduleName = help_AboutmodulesAboutmodules
+	moduleName = help_AboutAboutmodules
 	iconIdentifier = module-guide-tour-core
 	steps {
 		10 {

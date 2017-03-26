@@ -57,7 +57,7 @@ class PageRenderer {
 			$pageRenderer->addInlineLanguageLabelFile('EXT:guide/Resources/Private/Language/locallang.xlf');
 			// Add required styles
 			$cssPath = $pageRenderer->backPath . ExtensionManagementUtility::extRelPath('guide') . 'Resources/Public/Stylesheets/';
-			$pageRenderer->addCssFile($cssPath . 'bootstrap-tour.css', 'stylesheet', 'screen');
+			$pageRenderer->addCssFile($cssPath . 'bootstrap-tour.min.css', 'stylesheet', 'screen');
 			$pageRenderer->addCssFile($cssPath . 'bootstrap-tour-custom.css', 'stylesheet', 'screen');
 		}
 	}
