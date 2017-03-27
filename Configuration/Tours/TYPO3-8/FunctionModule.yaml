@@ -5,13 +5,13 @@
   placement: bottom
   showArrow: false
 20:
-  selector:  select[name=\"WebFuncJumpMenu\"]:first
+  selector:  select[data-menu-identifier='web-func-jump-menu']
   title:     Module menu
   content:   In this select box you"re able to switch between the different avaiable functions. Depending on your system configuration there could be more or less functions.
   placement: right
   shown:
     openSelectBox:
-      selector: select[ name =\"WebFuncJumpMenu\"]:first
+      selector: select[data-menu-identifier='web-func-jump-menu']
 30:
   selector:  #resizeable
   title:     Webpage preview
