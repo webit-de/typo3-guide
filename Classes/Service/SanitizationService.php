@@ -28,21 +28,17 @@ namespace Tx\Guide\Service;
 
 class SanitizationService
 {
-	/**
-	 * @param $content
-	 * @param $allowedTags
-	 * @return mixed|string
-	 */
-	public static function sanitizeHtml($content, $allowedTags='<h1><h2><h3><h4><h5><h6><ul><li><ol><pre><code><p>')
-	{
-		/*
-		 * Keep only white listed tags
-		 */
-		$content = strip_tags($content, $allowedTags);
-		/*
-		 * Kill off all attributes because we don't want them
-		 */
-		$content = preg_replace('/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i', '<$1$2>', $content);
-		return $content;
-	}
+    /**
+     * @param $content
+     * @param $allowedTags
+     * @return mixed|string
+     */
+    public static function sanitizeHtml($content, $allowedTags = '<h1><h2><h3><h4><h5><h6><ul><li><ol><pre><code><p>')
+    {
+        // Keep only white listed tags
+        $content = strip_tags($content, $allowedTags);
+        // Kill off all attributes because we don't want them
+        $content = preg_replace('/<([a-z][a-z0-9]*)[^>]*?(\/?)>/i', '<$1$2>', $content);
+        return $content;
+    }
 }

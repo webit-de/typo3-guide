@@ -1,0 +1,32 @@
+10:
+  selector:  div.x-tree-root-node:first
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.10.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.10.content
+  placement: bottom
+20:
+  selector:  #typo3-pagetree-topPanel-button-newNode
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.20.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.20.content
+  placement: bottom
+
+30:
+  selector:  #typo3-pagetree-topPanel-button-filter
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.30.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.30.content
+  placement: bottom
+40:
+  selector:  #typo3-pagetree-topPanel-button-refresh
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.40.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.40.content
+  placement: bottom
+# @todo don't have css classes in content html!
+50:
+  selector:  .icon-actions-document-view
+  title:     View webpage
+  content:   Click this button for displaying the webpage in a new tab.<br /><br /><span class="text-inf">Click on <i>End tour</i> in order to get back to the guides startpage.</span>
+  placement: bottom
+  shown:
+    renameNextButton: Start next tour
+  next:
+    tour: ViewModule
+    step: 0

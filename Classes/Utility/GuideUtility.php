@@ -30,10 +30,13 @@ use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Backend\Domain\Repository\Module\BackendModuleRepository;
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Service\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use \Tx\Guide\Service\SanitizationService;
+use Tx\Guide\Service\SanitizationService;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Form\Mvc\Configuration\YamlSource;
 
 /**
  * GuideUtility
@@ -44,6 +47,11 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class GuideUtility
 {
+    /**
+     * @var \TYPO3\CMS\Form\Mvc\Configuration\YamlSource
+     * @inject
+     */
+    protected $yamlSource;
 
     /**
      * @var \TYPO3\CMS\Extbase\Service\TypoScriptService
@@ -63,60 +71,67 @@ class GuideUtility
      */
     public function getRegisteredGuideTours()
     {
+        // Be sure the TypoScript service is available
+        if (!($this->typoScriptService instanceof TypoScriptService)) {
+            $this->typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+        }
+        //
+        // 1. Get configured tours registered by GuideUtility::addTour
+        $tours = array();
         $backendUser = $this->getBackendUserAuthentication();
-        $tours = $this->getBackendUserAuthentication()->getTSConfig(
+        if(isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['guide']['tours']) && count($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['guide']['tours'])>0) {
+            $tours = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['guide']['tours'];
+        }
+        //
+        // 2. Get tours defined by Page-TypoScript/tsconfig
+        $toursPage = $this->getBackendUserAuthentication()->getTSConfig(
             'mod.guide.tours', BackendUtility::getPagesTSconfig(0)
         );
+        if(is_array($toursPage['properties']) && count($toursPage['properties'])>0) {
+            $toursPage = $this->typoScriptService->convertTypoScriptArrayToPlainArray($toursPage['properties']);
+            ArrayUtility::mergeRecursiveWithOverrule($tours, $toursPage);
+        }
+        //
+        // 3. Get tours defined by User-TypoScript
         $toursUser = $this->getBackendUserAuthentication()->getTSConfig(
             'mod.guide.tours'
         );
-        ArrayUtility::mergeRecursiveWithOverrule($tours, $toursUser);
-        if (isset($tours['properties']) && !empty($tours['properties'])) {
-            // Be sure the TypoScript service is available
-            if (!($this->typoScriptService instanceof TypoScriptService)) {
-                $this->typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
-            }
-            $tours = $this->typoScriptService->convertTypoScriptArrayToPlainArray($tours['properties']);
-            // Translation handling
-            if (!empty($tours)) {
-                foreach ($tours as $tourKey => $tour) {
-                    if ($tourKey == 'ConfigurationExample') {
-                        unset($tours[$tourKey]);
-                        continue;
-                    }
-                    $tour['name'] = $tourKey;
-                    // Merge user configuration
-                    if (isset($backendUser->uc['moduleData']['guide'][$tour['name']])) {
-                        $tours[$tour['name']] = array_merge($tour,
-                            $backendUser->uc['moduleData']['guide'][$tour['name']]);
-                    } else {
-                        $tours[$tour['name']] = $tour;
-                    }
-                    // Be sure disabled is available
-                    if (!isset($tours[$tourKey]['disabled'])) {
-                        $tours[$tourKey]['disabled'] = false;
-                    }
-                    // Title and description
-                    $tours[$tourKey]['title'] = $this->translate($tours[$tourKey]['title']);
-                    $tours[$tourKey]['description'] = $this->translate($tours[$tourKey]['description']);
-                    // Generate an id
-                    $tours[$tourKey]['id'] = GeneralUtility::camelCaseToLowerCaseUnderscored($tour['name']);
-                    $tours[$tourKey]['id'] = 'guide-tour-' . str_replace('_', '-', $tours[$tourKey]['id']);
-                    // Remove steps
-                    if (!isset($tours[$tourKey]['currentStepNo'])) {
-                        $tours[$tourKey]['currentStepNo'] = 0;
-                    }
-                    $tours[$tourKey]['stepsCount'] = count($tours[$tourKey]['steps']);
-                    unset($tours[$tourKey]['steps']);
-                    // Tour is enabled for current user
-                    $tours[$tourKey]['enabled'] = $this->moduleEnabled($tour['moduleName']);
-                    if (!$tours[$tourKey]['enabled']) {
-                        unset($tours[$tourKey]);
-                    }
+        if(is_array($toursUser['properties']) && count($toursUser['properties'])>0) {
+            $toursUser = $this->typoScriptService->convertTypoScriptArrayToPlainArray($toursUser['properties']);
+            ArrayUtility::mergeRecursiveWithOverrule($tours, $toursUser);
+        }
+        if(count($tours) >0) {
+            foreach ($tours as $tourKey => $tour) {
+                $tour['name'] = $tourKey;
+                // Merge user configuration
+                if (isset($backendUser->uc['moduleData']['guide'][$tour['name']])) {
+                    $tours[$tour['name']] = array_merge($tour,
+                        $backendUser->uc['moduleData']['guide'][$tour['name']]);
+                } else {
+                    $tours[$tour['name']] = $tour;
+                }
+                // Be sure disabled is available
+                if (!isset($tours[$tourKey]['disabled'])) {
+                    $tours[$tourKey]['disabled'] = false;
+                }
+                // Title and description
+                $tours[$tourKey]['title'] = $this->translate($tours[$tourKey]['title']);
+                $tours[$tourKey]['description'] = $this->translate($tours[$tourKey]['description']);
+                // Generate an id
+                $tours[$tourKey]['id'] = GeneralUtility::camelCaseToLowerCaseUnderscored($tour['name']);
+                $tours[$tourKey]['id'] = 'guide-tour-' . str_replace('_', '-', $tours[$tourKey]['id']);
+                // Remove steps
+                if (!isset($tours[$tourKey]['currentStepNo'])) {
+                    $tours[$tourKey]['currentStepNo'] = 0;
+                }
+                $tours[$tourKey]['stepsCount'] = count($tours[$tourKey]['steps']);
+                unset($tours[$tourKey]['steps']);
+                // Tour/Module is enabled for current user
+                if (!$this->moduleEnabled($tour['moduleName'])) {
+                    // ..if not, remove that tour!
+                    unset($tours[$tourKey]);
                 }
             }
-        } else {
-            $tours = array();
         }
         return $tours;
     }
@@ -167,56 +182,106 @@ class GuideUtility
     {
         // Get all tours
         $tours = $this->getRegisteredGuideTours();
-        // Get steps
-        $tours[$tour]['steps'] = array();
-        $steps = $this->getBackendUserAuthentication()->getTSConfig(
-            'mod.guide.tours.' . $tour . '.steps', BackendUtility::getPagesTSconfig(0)
-        );
-        $stepsUser = $this->getBackendUserAuthentication()->getTSConfig(
-            'mod.guide.tours.' . $tour . '.steps'
-        );
-        ArrayUtility::mergeRecursiveWithOverrule($steps, $stepsUser);
-        if (isset($steps['properties']) && !empty($steps['properties'])) {
+        if(isset($tours[$tour])) {
+            $tour = $tours[$tour];
+            $tour['steps'] = array();
             // Be sure the TypoScript service is available
             if (!($this->typoScriptService instanceof TypoScriptService)) {
                 $this->typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
             }
-            $tours[$tour]['steps'] = $this->typoScriptService->convertTypoScriptArrayToPlainArray($steps['properties']);
-            // Translation handling
-            if (!empty($tours[$tour]['steps'])) {
-                foreach ($tours[$tour]['steps'] as $stepKey => $step) {
-                    $tours[$tour]['steps'][$stepKey]['title'] = $this->translate($tours[$tour]['steps'][$stepKey]['title']);
-                    $tours[$tour]['steps'][$stepKey]['content'] = $this->translate($tours[$tour]['steps'][$stepKey]['content']);
-                    $tours[$tour]['steps'][$stepKey]['title'] = SanitizationService::sanitizeHtml($tours[$tour]['steps'][$stepKey]['title']);
-                    // Strip disallowed tags
-                    $allowedTags = '<p><i><u><b><br>';
-                    $tours[$tour]['steps'][$stepKey]['title'] = strip_tags($tours[$tour]['steps'][$stepKey]['title']);
-                    $tours[$tour]['steps'][$stepKey]['content'] = SanitizationService::sanitizeHtml($tours[$tour]['steps'][$stepKey]['content'],
-                        $allowedTags);
-
-                    // Reset backdrop
-                    if (!isset($tours[$tour]['steps'][$stepKey]['backdrop'])) {
-                        $tours[$tour]['steps'][$stepKey]['backdrop'] = false;
+            //
+            // Get steps
+            // 1. Try to find a StepConfiguration.yaml file
+            if(isset($tour['stepsConfiguration'])) {
+                // Be sure the TypoScript service is available
+                if (!($this->yamlSource instanceof YamlSource)) {
+                    $this->yamlSource = GeneralUtility::makeInstance('TYPO3\\CMS\\Form\\Mvc\\Configuration\\YamlSource');
+                }
+                $stepsConfigurationFile = GeneralUtility::getFileAbsFileName($tour['stepsConfiguration']);
+                if(file_exists($stepsConfigurationFile)) {
+                    $tour['steps'] = $this->yamlSource->load(array($stepsConfigurationFile));
+                    unset($tour['stepsConfiguration']);
+                }
+            }
+            //
+            // 2. Get tour steps by Page-TypoScript/tsconfig
+            $stepsPage = $this->getBackendUserAuthentication()->getTSConfig(
+                'mod.guide.tours.' . $tour . '.steps', BackendUtility::getPagesTSconfig(0)
+            );
+            if(is_array($stepsPage['properties']) && count($stepsPage['properties'])>0) {
+                $stepsPage = $this->typoScriptService->convertTypoScriptArrayToPlainArray($stepsPage['properties']);
+                ArrayUtility::mergeRecursiveWithOverrule($tour['steps'], $stepsPage);
+            }
+            //
+            // 3. Get tour steps by User-TypoScript
+            $stepsUser = $this->getBackendUserAuthentication()->getTSConfig(
+                'mod.guide.tours.' . $tour . '.steps'
+            );
+            if(is_array($stepsUser['properties']) && count($stepsUser['properties'])>0) {
+                $stepsUser = $this->typoScriptService->convertTypoScriptArrayToPlainArray($stepsUser['properties']);
+                ArrayUtility::mergeRecursiveWithOverrule($tour['steps'], $stepsUser);
+            }
+            // Prepare tour steps
+            foreach ($tour['steps'] as $stepKey => $step) {
+                $tour['steps'][$stepKey]['title'] = $this->translate($tour['steps'][$stepKey]['title']);
+                $tour['steps'][$stepKey]['content'] = $this->translate($tour['steps'][$stepKey]['content']);
+                $tour['steps'][$stepKey]['title'] = SanitizationService::sanitizeHtml($tour['steps'][$stepKey]['title']);
+                // Strip disallowed tags
+                $tour['steps'][$stepKey]['title'] = strip_tags($tour['steps'][$stepKey]['title']);
+                // Prepare content
+                // Strip all tags an attributes and insert icons by identifier
+                $content = $tour['steps'][$stepKey]['content'];
+                $icons = array();
+                $allowedTags = array('<p>', '<i>', '<u>', '<b>', '<br>', '<img>');
+                if(preg_match_all("/<img\s(.+?)\/>/is", $tour['steps'][$stepKey]['content'], $replacements)) {
+                    foreach($replacements[0] as $icon) {
+                        $iconTag = '';
+                        $imgTag = new \SimpleXMLElement($icon);
+                        if($imgTag instanceof \SimpleXMLElement && isset($imgTag['data-icon-identifier'])) {
+                            $iconTag = '<' . (string)$imgTag['data-icon-identifier'] . '>';
+                            $iconTag = str_replace(array('-', '_'), '', $iconTag);
+                        }
+                        $icons[$iconTag] = (string)$imgTag['data-icon-identifier'];
+                        $allowedTags[] = $iconTag;
+                        $content = str_replace($icon, $iconTag, $content);
                     }
-                    else {
-                        $tours[$tour]['steps'][$stepKey]['backdrop'] = ($tours[$tour]['steps'][$stepKey]['backdrop']=='true');
+                    $allowedTags = implode('', $allowedTags);
+                }
+                // Cleanup HTML
+                $content = SanitizationService::sanitizeHtml($content, $allowedTags);
+                // Insert icons by IconFactory
+                if(count($icons)>0) {
+                    /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
+                    $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+                    foreach($icons as $replacement=>$iconIdentifier) {
+                        $icon = $iconFactory->getIcon($iconIdentifier, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
+                        $iconMarkup = $icon->render();
+                        $content = str_replace($replacement, $iconMarkup, $content);
                     }
-                    if (!isset($tours[$tour]['steps'][$stepKey]['backdropPadding'])) {
-                        $tours[$tour]['steps'][$stepKey]['backdropPadding'] = 0;
-                    }
-                    else {
-                        $tours[$tour]['steps'][$stepKey]['backdropPadding'] = (int)$tours[$tour]['steps'][$stepKey]['backdropPadding'];
-                    }
-                    if (!isset($tours[$tour]['steps'][$stepKey]['showArrow'])) {
-                        $tours[$tour]['steps'][$stepKey]['showArrow'] = true;
-                    }
-                    else {
-                        $tours[$tour]['steps'][$stepKey]['showArrow'] = ($tours[$tour]['steps'][$stepKey]['showArrow']=='true');
-                    }
+                }
+                $tour['steps'][$stepKey]['content'] = $content;
+                // Reset backdrop
+                if (!isset($tour['steps'][$stepKey]['backdrop'])) {
+                    $tour['steps'][$stepKey]['backdrop'] = false;
+                }
+                else {
+                    $tour['steps'][$stepKey]['backdrop'] = ($tour['steps'][$stepKey]['backdrop']=='true');
+                }
+                if (!isset($tour['steps'][$stepKey]['backdropPadding'])) {
+                    $tour['steps'][$stepKey]['backdropPadding'] = 0;
+                }
+                else {
+                    $tour['steps'][$stepKey]['backdropPadding'] = (int)$tour['steps'][$stepKey]['backdropPadding'];
+                }
+                if (!isset($tour['steps'][$stepKey]['showArrow'])) {
+                    $tour['steps'][$stepKey]['showArrow'] = true;
+                }
+                else {
+                    $tour['steps'][$stepKey]['showArrow'] = ($tour['steps'][$stepKey]['showArrow']=='true');
                 }
             }
         }
-        return $tours[$tour];
+        return $tour;
     }
 
     /**
@@ -311,4 +376,25 @@ class GuideUtility
         return $translationKey;
     }
 
+    /**
+     * Register new tours
+     * @param $identifier
+     * @param $title
+     * @param $description
+     * @param $moduleIdentifier
+     * @param $iconIdentifier
+     * @param $stepsConfigurationPath
+     */
+    static public function addTour($identifier, $title, $description, $moduleIdentifier, $iconIdentifier, $stepsConfigurationPath) {
+        $majorVersion = (int)(VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version)/1000000);
+        $versionPath = 'TYPO3-' . (string)$majorVersion;
+        $stepsConfiguration = $stepsConfigurationPath . $versionPath . '/' . $identifier . '.yaml';
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['guide']['tours'][$identifier] = [
+            'title' => $title,
+            'description' => $description,
+            'moduleName' => $moduleIdentifier,
+            'iconIdentifier' => $iconIdentifier,
+            'stepsConfiguration' => $stepsConfiguration
+        ];
+    }
 }

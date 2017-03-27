@@ -35,78 +35,81 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage tx_guide
  */
-class GuideController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class GuideController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+{
 
-	/**
-	 * @var \Tx\Guide\Utility\GuideUtility
-	 * @inject
-	 */
-	protected $guideUtility;
-	
-	/**
-	 * List available tours in backend module
-	 *
-	 * @return void
-	 */
-	public function listAction() {
-		$this->view->assign('userConfiguration', $this->guideUtility->getUserConfiguration());
-		$this->view->assign('tours', $this->guideUtility->getRegisteredGuideTours());
-	}
-	
-	/**
-	 * Renders the menu so that it can be returned as response to an AJAX call
-	 *
-	 * @param array $params Array of parameters from the AJAX interface, currently unused
-	 * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler $ajaxObj Object of type AjaxRequestHandler
-	 * @return void
-	 */
-	public function ajaxRequest($params = array(), \TYPO3\CMS\Core\Http\AjaxRequestHandler &$ajaxObj = NULL) {
-		$stepNo = (int)GeneralUtility::_GP('stepNo');
-		$tour = GeneralUtility::_GP('tour');
-		$cmd = GeneralUtility::_GP('cmd');
-		$startTourAfterLoading = (GeneralUtility::_GP('startTourAfterLoading')=='true') ? 'true' : 'false';
-		// Be sure the utility is available
-		if(!($this->guideUtility instanceof \Tx\Guide\Utility\GuideUtility)) {
-			$this->guideUtility = GeneralUtility::makeInstance('Tx\Guide\Utility\GuideUtility');
-		}
-		// Process command
-		$result = array();
-		switch ($cmd) {
-			case 'disableTour':
-				if($this->guideUtility->tourExists($tour)) {
-					$result['uc'] = $this->guideUtility->setTourDisabled($tour);
-					$result['cmd'][$cmd]['tour'] = $tour;
-					$result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
-				}
-				break;
-			case 'enableTour':
-				if($this->guideUtility->tourExists($tour)) {
-					$result['uc'] = $this->guideUtility->setTourDisabled($tour, FALSE);
-					$result['cmd'][$cmd]['tour'] = $tour;
-					$result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
-				}
-				break;
-			case 'setStepNo':
-				if($this->guideUtility->tourExists($tour)) {
-					$result['uc'] = $this->guideUtility->setTourStepNo($tour, $stepNo);
-					$result['cmd'][$cmd]['tour'] = $tour;
-					$result['cmd'][$cmd]['stepNo'] = $stepNo;
-					$result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
-				}
-				break;
-			case 'getTour':
-				if($this->guideUtility->tourExists($tour)) {
-					$result['cmd'][$cmd]['tour'] = $tour;
-					$result['cmd'][$cmd]['startTourAfterLoading'] = $startTourAfterLoading;
-					$result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
-				}
-				break;
-			case 'getTours':
-				$result['cmd'][$cmd] = array();
-				$result['tours'] = $this->guideUtility->getRegisteredGuideTours();
-				break;
-		}
-		$ajaxObj->addContent('result', json_encode($result));
-	}
-	
+    /**
+     * @var \Tx\Guide\Utility\GuideUtility
+     * @inject
+     */
+    protected $guideUtility;
+
+    /**
+     * List available tours in backend module
+     *
+     * @return void
+     */
+    public function listAction()
+    {
+        $this->view->assign('userConfiguration', $this->guideUtility->getUserConfiguration());
+        $this->view->assign('tours', $this->guideUtility->getRegisteredGuideTours());
+    }
+
+    /**
+     * Renders the menu so that it can be returned as response to an AJAX call
+     *
+     * @param array $params Array of parameters from the AJAX interface, currently unused
+     * @param \TYPO3\CMS\Core\Http\AjaxRequestHandler $ajaxObj Object of type AjaxRequestHandler
+     * @return void
+     */
+    public function ajaxRequest($params = array(), \TYPO3\CMS\Core\Http\AjaxRequestHandler &$ajaxObj = null)
+    {
+        $stepNo = (int)GeneralUtility::_GP('stepNo');
+        $tour = GeneralUtility::_GP('tour');
+        $cmd = GeneralUtility::_GP('cmd');
+        $startTourAfterLoading = (GeneralUtility::_GP('startTourAfterLoading') == 'true') ? 'true' : 'false';
+        // Be sure the utility is available
+        if (!($this->guideUtility instanceof \Tx\Guide\Utility\GuideUtility)) {
+            $this->guideUtility = GeneralUtility::makeInstance('Tx\Guide\Utility\GuideUtility');
+        }
+        // Process command
+        $result = array();
+        switch ($cmd) {
+            case 'disableTour':
+                if ($this->guideUtility->tourExists($tour)) {
+                    $result['uc'] = $this->guideUtility->setTourDisabled($tour, true);
+                    $result['cmd'][$cmd]['tour'] = $tour;
+                    $result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
+                }
+                break;
+            case 'enableTour':
+                if ($this->guideUtility->tourExists($tour)) {
+                    $result['uc'] = $this->guideUtility->setTourDisabled($tour, false);
+                    $result['cmd'][$cmd]['tour'] = $tour;
+                    $result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
+                }
+                break;
+            case 'setStepNo':
+                if ($this->guideUtility->tourExists($tour)) {
+                    $result['uc'] = $this->guideUtility->setTourStepNo($tour, $stepNo);
+                    $result['cmd'][$cmd]['tour'] = $tour;
+                    $result['cmd'][$cmd]['stepNo'] = $stepNo;
+                    $result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
+                }
+                break;
+            case 'getTour':
+                if ($this->guideUtility->tourExists($tour)) {
+                    $result['cmd'][$cmd]['tour'] = $tour;
+                    $result['cmd'][$cmd]['startTourAfterLoading'] = $startTourAfterLoading;
+                    $result['tour'] = $this->guideUtility->getRegisteredGuideTour($tour);
+                }
+                break;
+            case 'getTours':
+                $result['cmd'][$cmd] = array();
+                $result['tours'] = $this->guideUtility->getRegisteredGuideTours();
+                break;
+        }
+        $ajaxObj->addContent('result', json_encode($result, JSON_HEX_QUOT | JSON_HEX_TAG | JSON_HEX_AMP));
+    }
+
 }

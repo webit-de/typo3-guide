@@ -37,10 +37,10 @@ Within this tour node we need some required nodes, which can be defined like thi
 mod.guide.tours.ViewModule {
 	# The title of the tour. This title will be displayed in the backend module.
 	# Enter simply some text or use a LLL identifier.
-	title = LLL:EXT:guide/Resources/Private/Language/locallang_TourViewModule.xlf:tx_guide_tour.title
+	title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourViewModule.xlf:tx_guide_tour.title
 	# Description of the tour. This description will be displayed in the backend module.
 	# Enter simply some text or use a LLL identifier.
-	description = LLL:EXT:guide/Resources/Private/Language/locallang_TourViewModule.xlf:tx_guide_tour.description
+	description = LLL:EXT:guide/Resources/Private/Language/BootstrapTourViewModule.xlf:tx_guide_tour.description
 	# Internal name of the module.
 	# This is the same identifier like the module key (M parameter in backend links)
 	# The moduleName core is used for tours, which are execute in top frame.
@@ -61,6 +61,10 @@ mod.guide.tours.ViewModule {
 			# ...
 		}
 	}
+	# Steps configuration can have a path to a YAML file with the step configuration. This field is optional.
+	# By setting your step configuration with this path, you're able to provide conditional steps depending on TYPO3 
+	# Major version. Additionally the steps are dynanical reloaded and the Page-TypoScript (tsconfig) remains small.
+	stepsConfiguration = EXT:guide/Configuration/Tours/
 ```
 
 ### Step configuration
@@ -83,10 +87,14 @@ title = Welcome to TYPO3 backend
 # This is the content of the popover.
 # Enter simply some text or a LLL identifier like:
 # title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourPageModule.xlf:tx_guide_tour.0.content
-# You're also be able to use HTML tags like i, u, b, br or p. All other tags are disallowed.
+# You're also be able to use HTML tags like i, u, b, br or p. Additionally there is an img tag for displaying icons, 
+# which must have a data-icon-identifier attribute with the icon identifier. Such an icon usage could look like:
+# <img data-icon-identifier="module-web_layout"/>
+# All other tags are disallowed.
 content (
  This tour will show you the first steps within TYPO3.<br />
- You're starting here in the <i>about</i> module, which shows you your available modules. 
+ You're starting here in the <img data-icon-identifier="module-help_AboutAboutmodules"/> <i>about</i> module, 
+ which shows you your available modules. 
  This modules are related on the giving user authorisation.<br />
  <br />
  Click on <i>Next</i> for an introduction of the topbar of TYPO3.<br />
@@ -212,4 +220,64 @@ mod.guide.tours.ViewModule {
 }
 ```
 
-In the same way you're able to provide new definedguided tours.	
+In the same way you're able to provide new defined guided tours.
+
+
+## Adding new tours by using PHP
+Since version 2.0.0 you're able to define new tours by PHP. The advantage of this is, that you can outsource the step
+configuration into external yaml-files and the Page-TypoScript isn't so overloaded by processing all the steps again and
+again. This definition can be done by a short entry in your `ext_localconf.php`. This could look like:
+
+```php
+\Tx\Guide\Utility\GuideUtility::addTour(
+	'TemplateModule',
+	'LLL:EXT:guide/Resources/Private/Language/BootstrapTourTemplateModule.xlf:tx_guide_tour.title',
+	'LLL:EXT:guide/Resources/Private/Language/BootstrapTourTemplateModule.xlf:tx_guide_tour.description',
+	'web_ts',
+	'module-web_ts',
+	'EXT:guide/Configuration/Tours/'
+);
+
+```
+
+The `\Tx\Guide\Utility\GuideUtility::addTour` required the following parameters:
+
+1.	The tour identifier equally to the definition by Page-TypoScript.
+2.	The title for the tour. This can be a localization identifier too.
+3.	The description for the tour. This can be a localization identifier too.
+3.	The Module-Key of the tour. This is the same like the `m`-Parameter of the Module.
+4.	The Icon-Identifier for the tour
+5.	The base path for your *.yaml configuration files. By using this *addTour* method the *.yaml files contain the step
+	configuration of the tour
+
+>	*Note:*
+>
+>	When you're defining your tours by this way, you're still able to overwrite your tour in Page-TypoScript (tsconfig)
+>	or User-TypoScript. This behaves like descripted above. 
+
+
+
+## Create different steps for different Major versions of TYPO3
+By providing your step configuration by using YAML files, you're able to use different steps for different TYPO3
+versions. Just set the `stepsConfiguration` setting in your tour configuration on the base folder of your *.yaml files,
+as you've seen in *Adding tours by using PHP*. In our tours we set it for example to:
+
+```text
+EXT:guide/Configuration/Tours/
+```
+
+Now this base folder needs some sub folder in which the tours for the different TYPO3 versions are stored. Each folder
+is simply named by the major version number of TYPO3 - for example:
+
+```text
+EXT:your_ext
+- Configuration
+  - Tours
+    - TYPO3-7
+    - TYPO3-8
+    - TYPO3-x
+```
+
+In these folders the guided tour searches for YAML files, which have the same name as your tour identifier.
+For example, if you're running a TYPO3 LTS 8.7 and you want to define a tour with identifier `CreatePage`, the
+guided tours extension would search the steps configuration file in `Configuration/Tours/TYPO3-8/CreatePage.yaml`

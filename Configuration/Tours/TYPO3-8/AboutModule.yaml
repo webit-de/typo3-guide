@@ -1,0 +1,10 @@
+# Guided tour steps for AboutModule
+10:
+  selector:  .module
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourAboutModule.xlf:tx_guide_tour.10.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourAboutModule.xlf:tx_guide_tour.10.content
+  placement: top
+  showArrow: false
+  next:
+    tour: Topbar
+    step: 0

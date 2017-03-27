@@ -1,0 +1,30 @@
+10:
+  selector:  span[data-identifier='module-web_layout']
+  title:     Page module
+  content:   <img data-icon-identifier="module-web_layout"/> This is the button which opens the page module.<br />You will use it for editing you content.<br />Click on <i>Next</i> for jumping into the page module.
+  placement: bottom
+  shown:
+    renameNextButton: Go to page module
+  next:
+    tour: PageModule
+    step: 0
+20:
+  selector:  '#web_ViewpageView'
+  title:     View module
+  content:   This is the view module.
+  placement: right
+  shown:
+    renameNextButton: Go to page module
+  next:
+    tour: ViewModule
+    step: 0
+30:
+  selector:  '#web_func'
+  title:     Function module
+  content:   This is the function module.
+  placement: right
+  shown:
+    renameNextButton: Go to function module
+  next:
+    tour: FunctionModule
+    step: 0

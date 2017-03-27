@@ -7,7 +7,12 @@
 [ ] Aus Module raus -> restart
 [ ] JS-Aufrufe nicht in HTML/Template sondern via data-attr/id binden
 [ ] Tour nur starten wenn nicht disabled
+[ ] Tour: open-tour --step index-to-key übersetzung!
+[ ] Was ist, wenn Tree-Tour deaktiviert, man aber über eine Module-Tour aufruft.
+[ ] step.shown/event braucht ein setFocusOn.selector
 
-Extension-Configuration
-=======================
+- Data-Attribute Vorgehen
+
+Nice-to-have Extension-Configuration
+====================================
 [ ] Erlaubte Tags für den Contentbereich der popover

@@ -1,8 +1,8 @@
-mod.guide.tours.ViewModule {
-	title = LLL:EXT:guide/Resources/Private/Language/locallang_TourViewModule.xlf:tx_guide_tour.title
-	description = LLL:EXT:guide/Resources/Private/Language/locallang_TourViewModule.xlf:tx_guide_tour.description
-	moduleName = web_ViewpageView
-	iconIdentifier = module-guide-tour-view-module
+mod.guide.tours.TemplateModule {
+	title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTemplateModule.xlf:tx_guide_tour.title
+	description = LLL:EXT:guide/Resources/Private/Language/BootstrapTourTemplateModule.xlf:tx_guide_tour.description
+	moduleName = web_ts
+	iconIdentifier = module-web_ts
     steps {
 		10 {
 			selector = .module-docheader:first

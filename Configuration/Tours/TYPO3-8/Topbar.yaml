@@ -1,0 +1,53 @@
+10: 
+  selector:  li[data-toolbar-identifier='shortcut-toolbar-item']
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.10.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.10.content
+  placement: left
+  shown:
+    addClass:
+      selector: li[data-toolbar-identifier='shortcut-toolbar-item']
+      class:    open
+20:
+  selector:  li[data-toolbar-identifier='clear-cache-toolbar-item']
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.20.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.20.content
+  placement: left
+  shown:
+    addClass:
+      selector: li[data-toolbar-identifier='clear-cache-toolbar-item']
+      class:    open
+30:
+  selector:  li[data-toolbar-identifier='help-toolbar-item']
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.30.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.30.content
+  placement: left
+  shown:
+    addClass:
+      selector: li[data-toolbar-identifier='help-toolbar-item']
+      class:    open
+40:
+  selector:  li[data-toolbar-identifier='system-information-toolbar-item']
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.40.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.40.content
+  placement: left
+  shown:
+    addClass: 
+      selector: li[data-toolbar-identifier='system-information-toolbar-item']
+      class:    open
+50:
+  selector:  li[data-toolbar-identifier='user-toolbar-item']
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.50.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.50.content
+  placement: left
+  shown:
+    addClass: 
+      selector: li[data-toolbar-identifier='user-toolbar-item']
+      class:    open
+60:
+  selector:  li[data-toolbar-identifier='live-search-toolbar-item']
+  title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.60.title
+  content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.60.content
+  placement: bottom
+  next:
+    tour: Menu
+    step: 0
