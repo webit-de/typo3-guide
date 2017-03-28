@@ -5,12 +5,16 @@ mod.guide.tours.TemplateModule {
 	iconIdentifier = module-web_ts
     steps {
 		10 {
-			selector = .module-docheader:first
-			title = View module
-			content = The view module can be used for... Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-			placement = bottom
+			selector = .module-body
+			title = Template module
+			content = This is the TypoScript Template Module
+			placement = top
 			showArrow = false
 			backdrop = false
+			next {
+				tour = Menu
+				stepByKey = template-module-button
+			}
 		}
 		20 {
 			selector = #width
@@ -27,7 +31,7 @@ mod.guide.tours.TemplateModule {
 		40 {
 			selector = .icon-actions-document-view
 			title = View webpage
-			content = Click this button for displaying the webpage in a new tab.<br /><br /><span class="text-inf">Click on <i>End tour</i> in order to get back to the guides startpage.</span>
+			content = Click this button for displaying the webpage in a new tab.<br /><br />Click on <i>End tour</i> in order to get back to the guides startpage.
 			placement = bottom
 			next {
 				tour = FunctionModule

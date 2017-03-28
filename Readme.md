@@ -53,11 +53,16 @@ mod.guide.tours.ViewModule {
 	iconIdentifier = module-guide-tour-core
 	# In the steps node you have insert a node for each popover you want to display.
 	steps {
-		# The key of the steps must be numeric and defines the order of displaying the popover
+		# The key of the steps should be numeric and defines the order of displaying the popover
 		10 {
 			# ...
 		}
 		20 {
+			# ...
+		}
+		# A step key can also be defined by a key name. 
+		# This can be useful, if you like to jump to this step without knowing his step number.
+		step-key-by-key-name {
 			# ...
 		}
 	}
@@ -108,6 +113,7 @@ placement = top
 # The arrow is displayed by default.
 showArrow = false
 # Enables a backdrop.
+# This feature is currently in incubation
 backdrop = false
 # Set a padding for the backdrop
 backdropPadding = 0
@@ -141,7 +147,10 @@ in the last popover, just by clicking the next button.
 tour = Topbar
 # The number/id of the step, which should be displayed of the called tour
 step = 0
-
+# StepByKey resolves the step number by the key.
+# Internally it runs through the required tour and counts the steps till the defined stepByKey is found. Finally it set
+# the counted value into the step-attribute - this means, if you are using stepByKey the step-attribute isn't required.
+stepByKey = step-key-by-key-name
 ```
 
 ### The show node

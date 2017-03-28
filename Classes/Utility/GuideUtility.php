@@ -178,12 +178,13 @@ class GuideUtility
      * @param $tour
      * @return array
      */
-    public function getRegisteredGuideTour($tour)
+    public function getRegisteredGuideTour($tourName, $prepareTourSteps=true)
     {
+        $tour = array();
         // Get all tours
         $tours = $this->getRegisteredGuideTours();
-        if(isset($tours[$tour])) {
-            $tour = $tours[$tour];
+        if(isset($tours[$tourName])) {
+            $tour = $tours[$tourName];
             $tour['steps'] = array();
             // Be sure the TypoScript service is available
             if (!($this->typoScriptService instanceof TypoScriptService)) {
@@ -206,7 +207,7 @@ class GuideUtility
             //
             // 2. Get tour steps by Page-TypoScript/tsconfig
             $stepsPage = $this->getBackendUserAuthentication()->getTSConfig(
-                'mod.guide.tours.' . $tour . '.steps', BackendUtility::getPagesTSconfig(0)
+                'mod.guide.tours.' . $tourName . '.steps', BackendUtility::getPagesTSconfig(0)
             );
             if(is_array($stepsPage['properties']) && count($stepsPage['properties'])>0) {
                 $stepsPage = $this->typoScriptService->convertTypoScriptArrayToPlainArray($stepsPage['properties']);
@@ -215,73 +216,95 @@ class GuideUtility
             //
             // 3. Get tour steps by User-TypoScript
             $stepsUser = $this->getBackendUserAuthentication()->getTSConfig(
-                'mod.guide.tours.' . $tour . '.steps'
+                'mod.guide.tours.' . $tourName . '.steps'
             );
             if(is_array($stepsUser['properties']) && count($stepsUser['properties'])>0) {
                 $stepsUser = $this->typoScriptService->convertTypoScriptArrayToPlainArray($stepsUser['properties']);
                 ArrayUtility::mergeRecursiveWithOverrule($tour['steps'], $stepsUser);
             }
             // Prepare tour steps
-            foreach ($tour['steps'] as $stepKey => $step) {
-                $tour['steps'][$stepKey]['title'] = $this->translate($tour['steps'][$stepKey]['title']);
-                $tour['steps'][$stepKey]['content'] = $this->translate($tour['steps'][$stepKey]['content']);
-                $tour['steps'][$stepKey]['title'] = SanitizationService::sanitizeHtml($tour['steps'][$stepKey]['title']);
-                // Strip disallowed tags
-                $tour['steps'][$stepKey]['title'] = strip_tags($tour['steps'][$stepKey]['title']);
-                // Prepare content
-                // Strip all tags an attributes and insert icons by identifier
-                $content = $tour['steps'][$stepKey]['content'];
-                $icons = array();
-                $allowedTags = array('<p>', '<i>', '<u>', '<b>', '<br>', '<img>');
-                if(preg_match_all("/<img\s(.+?)\/>/is", $tour['steps'][$stepKey]['content'], $replacements)) {
-                    foreach($replacements[0] as $icon) {
-                        $iconTag = '';
-                        $imgTag = new \SimpleXMLElement($icon);
-                        if($imgTag instanceof \SimpleXMLElement && isset($imgTag['data-icon-identifier'])) {
-                            $iconTag = '<' . (string)$imgTag['data-icon-identifier'] . '>';
-                            $iconTag = str_replace(array('-', '_'), '', $iconTag);
+            if($prepareTourSteps) {
+                foreach ($tour['steps'] as $stepKey => $step) {
+                    $tour['steps'][$stepKey]['title'] = $this->translate($tour['steps'][$stepKey]['title']);
+                    $tour['steps'][$stepKey]['content'] = $this->translate($tour['steps'][$stepKey]['content']);
+                    $tour['steps'][$stepKey]['title'] = SanitizationService::sanitizeHtml($tour['steps'][$stepKey]['title']);
+                    // Strip disallowed tags
+                    $tour['steps'][$stepKey]['title'] = strip_tags($tour['steps'][$stepKey]['title']);
+                    // Prepare content
+                    // Strip all tags an attributes and insert icons by identifier
+                    $content = $tour['steps'][$stepKey]['content'];
+                    $icons = array();
+                    $allowedTags = array('<p>', '<i>', '<u>', '<b>', '<br>', '<img>');
+                    if(preg_match_all("/<img\s(.+?)\/>/is", $tour['steps'][$stepKey]['content'], $replacements)) {
+                        foreach($replacements[0] as $icon) {
+                            $iconTag = '';
+                            $imgTag = new \SimpleXMLElement($icon);
+                            if($imgTag instanceof \SimpleXMLElement && isset($imgTag['data-icon-identifier'])) {
+                                $iconTag = '<' . (string)$imgTag['data-icon-identifier'] . '>';
+                                $iconTag = str_replace(array('-', '_'), '', $iconTag);
+                            }
+                            $icons[$iconTag] = (string)$imgTag['data-icon-identifier'];
+                            $allowedTags[] = $iconTag;
+                            $content = str_replace($icon, $iconTag, $content);
                         }
-                        $icons[$iconTag] = (string)$imgTag['data-icon-identifier'];
-                        $allowedTags[] = $iconTag;
-                        $content = str_replace($icon, $iconTag, $content);
+                        $allowedTags = implode('', $allowedTags);
                     }
-                    $allowedTags = implode('', $allowedTags);
-                }
-                // Cleanup HTML
-                $content = SanitizationService::sanitizeHtml($content, $allowedTags);
-                // Insert icons by IconFactory
-                if(count($icons)>0) {
-                    /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
-                    $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
-                    foreach($icons as $replacement=>$iconIdentifier) {
-                        $icon = $iconFactory->getIcon($iconIdentifier, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
-                        $iconMarkup = $icon->render();
-                        $content = str_replace($replacement, $iconMarkup, $content);
+                    // Cleanup HTML
+                    $content = SanitizationService::sanitizeHtml($content, $allowedTags);
+                    // Insert icons by IconFactory
+                    if(count($icons)>0) {
+                        /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
+                        $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+                        foreach($icons as $replacement=>$iconIdentifier) {
+                            $icon = $iconFactory->getIcon($iconIdentifier, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL);
+                            $iconMarkup = $icon->render();
+                            $content = str_replace($replacement, $iconMarkup, $content);
+                        }
                     }
-                }
-                $tour['steps'][$stepKey]['content'] = $content;
-                // Reset backdrop
-                if (!isset($tour['steps'][$stepKey]['backdrop'])) {
-                    $tour['steps'][$stepKey]['backdrop'] = false;
-                }
-                else {
-                    $tour['steps'][$stepKey]['backdrop'] = ($tour['steps'][$stepKey]['backdrop']=='true');
-                }
-                if (!isset($tour['steps'][$stepKey]['backdropPadding'])) {
-                    $tour['steps'][$stepKey]['backdropPadding'] = 0;
-                }
-                else {
-                    $tour['steps'][$stepKey]['backdropPadding'] = (int)$tour['steps'][$stepKey]['backdropPadding'];
-                }
-                if (!isset($tour['steps'][$stepKey]['showArrow'])) {
-                    $tour['steps'][$stepKey]['showArrow'] = true;
-                }
-                else {
-                    $tour['steps'][$stepKey]['showArrow'] = ($tour['steps'][$stepKey]['showArrow']=='true');
+                    $tour['steps'][$stepKey]['content'] = $content;
+                    // Reset backdrop
+                    if (!isset($tour['steps'][$stepKey]['backdrop'])) {
+                        $tour['steps'][$stepKey]['backdrop'] = false;
+                    }
+                    else {
+                        $tour['steps'][$stepKey]['backdrop'] = ($tour['steps'][$stepKey]['backdrop']=='true');
+                    }
+                    if (!isset($tour['steps'][$stepKey]['backdropPadding'])) {
+                        $tour['steps'][$stepKey]['backdropPadding'] = 0;
+                    }
+                    else {
+                        $tour['steps'][$stepKey]['backdropPadding'] = (int)$tour['steps'][$stepKey]['backdropPadding'];
+                    }
+                    if (!isset($tour['steps'][$stepKey]['showArrow'])) {
+                        $tour['steps'][$stepKey]['showArrow'] = true;
+                    }
+                    else {
+                        $tour['steps'][$stepKey]['showArrow'] = ($tour['steps'][$stepKey]['showArrow']=='true');
+                    }
+                    # Resolve next step index/key
+                    if(isset($tour['steps'][$stepKey]['next']) && isset($tour['steps'][$stepKey]['next']['stepByKey'])) {
+                        $stepByKey = trim($tour['steps'][$stepKey]['next']['stepByKey']);
+                        $stepTour = trim($tour['steps'][$stepKey]['next']['tour']);
+                        $tour['steps'][$stepKey]['next']['step'] = $this->resolveStepNoByStepKey($stepTour, $stepByKey);
+                    }
                 }
             }
         }
         return $tour;
+    }
+
+    protected function resolveStepNoByStepKey($tourName, $stepKeyName) {
+        $step = 0;
+        $stepNumber = 0;
+        $tour = $this->getRegisteredGuideTour($tourName, false);
+        foreach ($tour['steps'] as $stepKey => $step) {
+            if($stepKey == $stepKeyName) {
+                $step = $stepNumber;
+                break;
+            }
+            $stepNumber++;
+        }
+        return $step;
     }
 
     /**

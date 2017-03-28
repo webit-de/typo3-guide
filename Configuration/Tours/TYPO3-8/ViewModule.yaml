@@ -18,7 +18,7 @@
 40:
   selector:  .icon-actions-document-view
   title:     View webpage
-  content:   Click this button for displaying the webpage in a new tab.<br /><br /><span class="text-inf">Click on <i>End tour</i> in order to get back to the guides startpage.</span>
+  content:   Click this button for displaying the webpage in a new tab.<br /><br />Click on <i>End tour</i> in order to get back to the guides startpage.
   placement: bottom
   next:
     tour: FunctionModule

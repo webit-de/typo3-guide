@@ -28,3 +28,13 @@
   next:
     tour: FunctionModule
     step: 0
+template-module-button:
+  selector:  span[data-identifier='module-web_ts']
+  title:     Template module
+  content:   Here you will find the TypoScript Template Module
+  placement: right
+  #shown:
+  #  renameNextButton: Go to function module
+  next:
+    tour: Tree
+    stepByKey: template-module-click-root

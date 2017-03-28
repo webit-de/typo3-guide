@@ -2,6 +2,10 @@
 
 ### 2017-03-27  Thomas Deuling  <typo3@coding.ms>
 
+*	[FEATURE] Starting next tour is now possible by stepByKey (more information in Readme.md)
+
+### 2017-03-27  Thomas Deuling  <typo3@coding.ms>
+
 *	[TASK] Dont-show-again checkbox now disables and ends the current tour
 *	[TASK] Conditional Tours, depending on TYPO3 major version
 *	[FEATURE] Allow icons by icon identifier in Popover content

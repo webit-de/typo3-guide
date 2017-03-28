@@ -19,14 +19,23 @@
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.40.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.40.content
   placement: bottom
-# @todo don't have css classes in content html!
 50:
   selector:  .icon-actions-document-view
   title:     View webpage
-  content:   Click this button for displaying the webpage in a new tab.<br /><br /><span class="text-inf">Click on <i>End tour</i> in order to get back to the guides startpage.</span>
+  content:   Click this button for displaying the webpage in a new tab.<br /><br />Click on <i>End tour</i> in order to get back to the guides startpage.
   placement: bottom
   shown:
     renameNextButton: Start next tour
   next:
     tour: ViewModule
+    step: 0
+template-module-click-root:
+  selector:  span[data-uid='0']
+  title:     Page tree
+  content:   Click on the Page tree root page in order to get an overview about all available TypoScript templates.
+  placement: bottom
+  shown:
+    renameNextButton: Start next tour
+  next:
+    tour: TemplateModule
     step: 0
