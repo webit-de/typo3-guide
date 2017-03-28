@@ -1,8 +1,15 @@
-10: 
+9:
+  selector:  div[data-topbar-identifier='topbar']
+  title:     Topbar
+  content:   This is the topbar. Here you will find some global functionalities
+  placement: bottom
+  #click: true
+10:
   selector:  li[data-toolbar-identifier='shortcut-toolbar-item']
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.10.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.10.content
   placement: left
+  click: true
   shown:
     addClass:
       selector: li[data-toolbar-identifier='shortcut-toolbar-item']
@@ -12,6 +19,7 @@
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.20.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.20.content
   placement: left
+  click: true
   shown:
     addClass:
       selector: li[data-toolbar-identifier='clear-cache-toolbar-item']
@@ -21,6 +29,7 @@
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.30.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.30.content
   placement: left
+  click: true
   shown:
     addClass:
       selector: li[data-toolbar-identifier='help-toolbar-item']
@@ -30,6 +39,7 @@
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.40.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.40.content
   placement: left
+  click: true
   shown:
     addClass: 
       selector: li[data-toolbar-identifier='system-information-toolbar-item']
@@ -39,6 +49,7 @@
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.50.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.50.content
   placement: left
+  click: true
   shown:
     addClass: 
       selector: li[data-toolbar-identifier='user-toolbar-item']
@@ -48,6 +59,7 @@
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.60.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTopbar.xlf:tx_guide_tour.60.content
   placement: bottom
+  click: true
   next:
     tour: Menu
     step: 0

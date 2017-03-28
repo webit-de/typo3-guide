@@ -7,7 +7,7 @@ mod.guide.tours.TemplateModule {
 		10 {
 			selector = .module-body
 			title = Template module
-			content = This is the TypoScript Template Module
+			content = This is the <b>TypoScript</b> Template Module
 			placement = top
 			showArrow = false
 			backdrop = false
@@ -17,26 +17,27 @@ mod.guide.tours.TemplateModule {
 			}
 		}
 		20 {
-			selector = #width
-			title = Responsive preview
-			content = Select a device width for the preview area.
+			selector = select[data-menu-identifier='web-func-jump-menu']
+			title = Module menu
+			content = This menu allows you to switch between different module views
+			placement = right
+		}
+
+
+
+		200 {
+			selector = select[data-menu-identifier='templates-on-page']
+			title = Templates on page
+			content = Here you're able to switch between different TypoScript templates, which might be on this page.
 			placement = bottom
 		}
-		30 {
-			selector = #resizeable
-			title = Webpage preview
-			content = This is the preview of you webpage.
-			placement = top
-		}
-		40 {
-			selector = .icon-actions-document-view
-			title = View webpage
-			content = Click this button for displaying the webpage in a new tab.<br /><br />Click on <i>End tour</i> in order to get back to the guides startpage.
+		210 {
+			selector = select[data-menu-identifier='constant-editor-cat']
+			title = Constants categories
+			content = Here you're able to switch between different constant categories.
 			placement = bottom
-			next {
-				tour = FunctionModule
-				step = 0
-			}
 		}
+
+
     }
 }

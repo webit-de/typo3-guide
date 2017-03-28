@@ -37,4 +37,6 @@ template-module-button:
   #  renameNextButton: Go to function module
   next:
     tour: Tree
-    stepByKey: template-module-click-root
+    stepByKey: template-module-root-page-description
+  click:
+    selector: span[data-identifier='module-web_ts']

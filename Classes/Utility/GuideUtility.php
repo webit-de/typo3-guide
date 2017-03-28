@@ -247,9 +247,9 @@ class GuideUtility
                             $allowedTags[] = $iconTag;
                             $content = str_replace($icon, $iconTag, $content);
                         }
-                        $allowedTags = implode('', $allowedTags);
                     }
                     // Cleanup HTML
+                    $allowedTags = implode('', $allowedTags);
                     $content = SanitizationService::sanitizeHtml($content, $allowedTags);
                     // Insert icons by IconFactory
                     if(count($icons)>0) {
@@ -287,6 +287,20 @@ class GuideUtility
                         $stepTour = trim($tour['steps'][$stepKey]['next']['tour']);
                         $tour['steps'][$stepKey]['next']['step'] = $this->resolveStepNoByStepKey($stepTour, $stepByKey);
                     }
+                    // Click event
+                    if (isset($tour['steps'][$stepKey]['click'])) {
+                        if(isset($tour['steps'][$stepKey]['click']['selector'])) {
+                            $tour['steps'][$stepKey]['click'] = $tour['steps'][$stepKey]['click']['selector'];
+                        }
+                        else {
+                            $tour['steps'][$stepKey]['click'] = true;
+                        }
+                    }
+                    else {
+                        $tour['steps'][$stepKey]['click'] = false;
+                    }
+                    // Current step no
+                    $tour['steps'][$stepKey]['currentStepNo'] = $this->getTourStepNo($tourName);
                 }
             }
         }
@@ -294,17 +308,17 @@ class GuideUtility
     }
 
     protected function resolveStepNoByStepKey($tourName, $stepKeyName) {
-        $step = 0;
+        $stepReturn = 0;
         $stepNumber = 0;
         $tour = $this->getRegisteredGuideTour($tourName, false);
         foreach ($tour['steps'] as $stepKey => $step) {
             if($stepKey == $stepKeyName) {
-                $step = $stepNumber;
+                $stepReturn = $stepNumber;
                 break;
             }
             $stepNumber++;
         }
-        return $step;
+        return $stepReturn;
     }
 
     /**
@@ -356,6 +370,19 @@ class GuideUtility
         // Write back into user configuration
         $backendUser->writeUC($backendUser->uc);
         return $backendUser->uc['moduleData']['guide'][$tourName];
+    }
+
+    /**
+     * @param $tourName
+     * @return int
+     */
+    protected function getTourStepNo($tourName) {
+        $stepNo = 0;
+        $backendUser = $this->getBackendUserAuthentication();
+        if (isset($backendUser->uc['moduleData']['guide'][$tourName])) {
+            $stepNo = $backendUser->uc['moduleData']['guide'][$tourName]['currentStepNo'];
+        }
+        return $stepNo;
     }
 
     /**

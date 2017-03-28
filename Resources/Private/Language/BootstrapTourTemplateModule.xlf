@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-09-23T15:21:54Z" product-name="guide">
+		<header/>
+		<body>
+			<trans-unit id="tx_guide_tour.title">
+				<source>Template module</source>
+			</trans-unit>
+			<trans-unit id="tx_guide_tour.description">
+				<source>This tour requires that you have at least one page in your page tree!</source>
+			</trans-unit>
+
+
+		</body>
+	</file>
+</xliff>

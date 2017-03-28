@@ -11,11 +11,10 @@
 [ ] Was ist, wenn Tree-Tour deaktiviert, man aber über eine Module-Tour aufruft.
 [ ] step.shown/event braucht ein setFocusOn.selector
 [ ] smartPlacement + placement:auto implementation
-[ ]
+[ ] Popover sollen beim scrollen nicht stehen bleiben
 
-- Data-Attribute Vorgehen
 
 Nice-to-have Extension-Configuration
 ====================================
 [ ] Erlaubte Tags für den Contentbereich der popover
-[ ] aktivate logger for debugging
+[ ] Activate logger for debugging + tour._debug

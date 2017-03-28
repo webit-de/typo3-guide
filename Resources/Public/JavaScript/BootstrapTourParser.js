@@ -37,6 +37,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 				 * for example: top, bottom, left, right
 				 */
 				placement: current.placement,
+				smartPlacement: true,
 
 				// function that will be executed shown the current step will be shown
 				show: current.show,
@@ -47,8 +48,11 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 				nextStep: current.next,
 				showArrow: current.showArrow,
 				// Events which will be executed onHide
-				hide: current.hide
-			})
+				hide: current.hide,
+				// Enable the reflex mode: attach an handler on click on the step element to continue the tour.
+				// In order to bind the handler to a custom event, you can pass a string with its name.
+				reflex: current.click
+			});
 		});
 
 		return steps;
@@ -178,7 +182,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 			onNext:     function(tour) {
 				var stepIndex = tour.getCurrentStep();
 				var step = tour.getStep(stepIndex);
-				Logger.log('onNext: ', typeof step.nextStep !== "undefined", tour);
+				Logger.log('onNext: ', typeof step.nextStep !== "undefined", ', tour:', tour, ', step:', step);
 				if(typeof step.nextStep !== "undefined") {
 
 					var newTourName = step.nextStep.tour;
@@ -197,7 +201,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 						}
 					}
 					var stepId = parseInt(step.nextStep.step, 10);
-					Logger.log('switch to tour: ', newTourName);
+					Logger.log('switch to tour: ', newTourName, ', step: ', stepId);
 					if(stepId>0) {
 						top.TYPO3.Guide.startTourWithStep(newTourName, stepId);
 					}
@@ -207,7 +211,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 				}
 			},
 
-			steps : this.parseSteps(current.steps),
+			steps: this.parseSteps(current.steps),
 
 			handleEvents: function(events, eventType, tour, step) {
 				Logger.log("Handle Events for " + eventType);
@@ -246,6 +250,10 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 				}
 			},
 
+			/**
+			 * Sends the current tour status to the backend for reminding it in user configuration
+			 * @param tour
+			 */
 			sendStatus: function(tour) {
 				jQuery.ajax({
 					dataType: 'json',
@@ -257,6 +265,16 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 					},
 					success: function (result) {
 						Logger.log('SET STEP: ', result);
+
+						if(typeof result['cmd']['setStepNo'] != 'undefined') {
+							var tour = result.cmd.setStepNo.tour;
+							var stepNo = result.cmd.setStepNo.stepNo;
+							if(typeof top.TYPO3.Guide.TourData[tour] != 'undefined') {
+								top.TYPO3.Guide.TourData[tour].currentStepNo = stepNo;
+								Logger.log('SET STEP: ', top.TYPO3.Guide.TourData[tour]);
+							}
+						}
+
 					},
 					error: function (result) {
 						Logger.error('Upps, an error occured. Message was: ', result);

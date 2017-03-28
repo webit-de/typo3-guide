@@ -29,13 +29,20 @@
   next:
     tour: ViewModule
     step: 0
-template-module-click-root:
-  selector:  span[data-uid='0']
+template-module-root-page-description:
+  selector:  div.x-tree-node-el:first
   title:     Page tree
-  content:   Click on the Page tree root page in order to get an overview about all available TypoScript templates.
+  content:   Use the Page tree root page in order to get an overview about all available TypoScript templates.
   placement: bottom
-  shown:
-    renameNextButton: Start next tour
+  click:
+    selector: div.x-tree-node-el:first
+template-module-root-page-description-1:
+  selector:  div.x-tree-node-el:eq(1)
+  title:     Page tree
+  content:   Use another page to create a new TypoScript template or modify an existing. Click on this page to resume!
+  placement: bottom
   next:
     tour: TemplateModule
-    step: 0
+    step: 1
+  click:
+    selector: div.x-tree-node-el:eq(1)

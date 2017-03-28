@@ -2,6 +2,10 @@
 
 ### 2017-03-27  Thomas Deuling  <typo3@coding.ms>
 
+*	[FEATURE] Placement now allows the value auto, which automatically identify the best placement.
+*	[FEATURE] Starting next tour is now possible by stepByKey (more information in Readme.md)
+*	[BUGFIX] Fix for content HTML validation
+*	[TASK] Insert new designed extension icon
 *	[FEATURE] Starting next tour is now possible by stepByKey (more information in Readme.md)
 
 ### 2017-03-27  Thomas Deuling  <typo3@coding.ms>

@@ -4,7 +4,7 @@
 body > .popover {
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
 	min-width: 300px;
-	z-index: 9999 !important;
+	z-index: 1001 !important;
 }
 body > .popover.fade.in {
 	opacity: 0;
@@ -32,6 +32,9 @@ body > .popover .separator-right {
 body > .popover .dont-show-again label {
 	cursor: pointer;
 	font-weight: normal;
+}
+.tour-step-element-reflex {
+    outline: 1px solid red;
 }
 /**
  * Backend module

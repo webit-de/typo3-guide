@@ -107,7 +107,7 @@ content (
  <i>(You can restart each tour by the guided tours module.)</i>
 )
 # Defines the position of the popover.
-# Possible values are: top, bottom, left, right
+# Possible values are: top, bottom, left, right, auto
 placement = top
 # Disables the arrow on popover.
 # The arrow is displayed by default.
