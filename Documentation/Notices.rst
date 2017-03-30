@@ -10,8 +10,8 @@
 [ ] Tour: open-tour --step index-to-key übersetzung!
 [ ] Was ist, wenn Tree-Tour deaktiviert, man aber über eine Module-Tour aufruft.
 [ ] step.shown/event braucht ein setFocusOn.selector
-[ ] smartPlacement + placement:auto implementation
 [ ] Popover sollen beim scrollen nicht stehen bleiben
+[ ] core tours nicht disablen
 
 
 Nice-to-have Extension-Configuration

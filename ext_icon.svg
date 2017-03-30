@@ -1,36 +1,17 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xml:space="preserve"
-   enable-background="new 0 0 1000.01 1000.01"
-   viewBox="0 0 1000.01 1000.01"
-   height="1000.01px"
-   width="1000.01px"
-   y="0px"
-   x="0px"
-   id="Ebene_1"
-   version="1.1"><metadata
-     id="metadata15"><rdf:RDF><cc:Work
-         rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-           rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
-     id="defs13" /><path
-     fill="#013177"
-     style="fill:#97a548;fill-opacity:1"
-     id="path3"
-     d="M0,0h1000.01v1000.01H0V0z" /><path
-     id="path4182"
-     d="m 87.5,240.76001 828.75,0 0,468.75 -316.25,0 -100,100 -101.69093,-100 -310.80907,0 z"
-     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:50;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><path
-     id="path4234"
-     d="m 246.875,381.51001 510,0"
-     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:43.54205704;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><path
-     id="path4236"
-     d="m 246.875,476.51001 510,0"
-     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:43.54205704;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /><path
-     id="path4238"
-     d="m 246.875,570.26 510,0"
-     style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:43.54205704;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" /></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.2, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1"
+	 id="Ebene_1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1000 1000"
+	 style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#79A548;}
+	.st1{fill:none;stroke:#FFFFFF;stroke-width:50;}
+	.st2{fill:none;stroke:#FFFFFF;stroke-width:43.5421;}
+</style>
+<path id="path3" class="st0" d="M0,0h1000v1000H0V0z"/>
+<path id="path4182" class="st1" d="M87.5,240.8h828.8v468.8H600l-100,100l-101.7-100H87.5V240.8z"/>
+<path id="path4234" class="st2" d="M246.9,381.5h510"/>
+<path id="path4236" class="st2" d="M246.9,476.5h510"/>
+<path id="path4238" class="st2" d="M246.9,570.3h510"/>
+</svg>
