@@ -8,3 +8,16 @@
   next:
     tour: Topbar
     step: 0
+end:
+  selector:  h1
+  title:     Enjoy working with TYPO3
+  content:   That was the short introduction of TYPO3. You can restart each guided tour by using the guided tours module in the topbar.<br/><br/>
+  placement: top
+  showArrow: false
+  next:
+    tour: Topbar
+    step: 0
+  shown:
+    addClass:
+      selector: '#popover-button-next'
+      class: hidden

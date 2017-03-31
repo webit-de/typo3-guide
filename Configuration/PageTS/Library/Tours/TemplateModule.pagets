@@ -5,10 +5,10 @@ mod.guide.tours.TemplateModule {
 	iconIdentifier = module-web_ts
     steps {
 		10 {
-			selector = .module-body
+			selector = .module-docheader
 			title = Template module
-			content = This is the <b>TypoScript</b> Template Module
-			placement = top
+			content = This is the TypoScript Template Module.
+			placement = bottom
 			showArrow = false
 			backdrop = false
 			next {
@@ -23,8 +23,6 @@ mod.guide.tours.TemplateModule {
 			placement = right
 		}
 
-
-
 		200 {
 			selector = select[data-menu-identifier='templates-on-page']
 			title = Templates on page
@@ -37,6 +35,22 @@ mod.guide.tours.TemplateModule {
 			content = Here you're able to switch between different constant categories.
 			placement = bottom
 		}
+		220 {
+			selector = .tstemplate-constanteditor
+			title = Constants
+			content = The following table allows you to modify the TypoScript constants from the selected category.
+			placement = top
+		}
+		230 {
+			selector = span[data-identifier='actions-open']:first
+			title = Constants
+			content = Click the <img data-icon-identifier="actions-open"/> icon for modify the constant.<br />If the pencil is deactivated, TYPO3 will use the defined default value for the TypoScript constant.
+			placement = left
+			click = true
+		}
+
+
+
 
 
     }

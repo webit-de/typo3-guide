@@ -18,3 +18,11 @@ Nice-to-have Extension-Configuration
 ====================================
 [ ] Erlaubte Tags für den Contentbereich der popover
 [ ] Activate logger for debugging + tour._debug
+
+
+
+Erforderliche Data-Attribute
+[ ] Root-Seite des Page-Trees
+[ ] Erste Unterseite des Pagetrees
+[ ] Page tree action buttons (das div darumherum)
+[ ] module, meldung klicke seite an

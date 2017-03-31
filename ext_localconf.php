@@ -44,7 +44,11 @@ $tours = array(
     'Menu' => array(
         'moduleIdentifier' => 'core',
         'iconIdentifier' => 'module-guide-tour-core'
-    )
+    ),
+    'CreatePageByPageTreeContextMenu' => array(
+        'moduleIdentifier' => 'web_layout',
+        'iconIdentifier' => 'actions-page-new'
+    ),
 );
 foreach($tours as $tourKey => $tour) {
     \Tx\Guide\Utility\GuideUtility::addTour(

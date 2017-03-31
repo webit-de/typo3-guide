@@ -1,7 +1,7 @@
 10:
   selector:  .module-docheader
   title:     Page module
-  content:   The view module can be used for... Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+  content:   The page module helps you by organizing your visible content on your website. The shown content of the page module depends on the current selected page. You're able to switch between different pages by using the page tree.
   placement: bottom
   showArrow: false
   next:

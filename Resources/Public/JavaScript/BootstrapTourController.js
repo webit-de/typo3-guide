@@ -143,15 +143,11 @@ define(['jquery', 'TYPO3/CMS/Guide/BootstrapTourParser', 'TYPO3/CMS/Guide/Logger
 		if(typeof top.TYPO3.Guide.currentTourName != 'undefined') {
 			if(typeof top.TYPO3.Guide.Tours[top.TYPO3.Guide.currentTourName] != 'undefined') {
 				var tour = top.TYPO3.Guide.Tours[top.TYPO3.Guide.currentTourName];
-
 				Logger.log('end: ', top.TYPO3.Guide.Tours[top.TYPO3.Guide.currentTourName]);
-
 				if(typeof tour._state != 'undefined') {
-					console.warn('end');
 					tour.end();
 				}
 				top.TYPO3.Guide.currentTourName = '';
-
 			}
 		}
 	};
@@ -163,9 +159,8 @@ define(['jquery', 'TYPO3/CMS/Guide/BootstrapTourParser', 'TYPO3/CMS/Guide/Logger
 	top.TYPO3.Guide.jumpToModuleIfRequired = function (moduleName) {
 		// Executed within a frame?
 		if(window.top !== window.self && moduleName !== 'core') {
-
 			var currentModuleId = top.TYPO3.Guide.getUrlParameterByName('M', window.location.href);
-			if(moduleName !== currentModuleId) {
+			if(moduleName !== currentModuleId && currentModuleId!=null) {
 				top.goToModule(moduleName);
 				return true;
 			}
@@ -284,7 +279,30 @@ define(['jquery', 'TYPO3/CMS/Guide/BootstrapTourParser', 'TYPO3/CMS/Guide/Logger
 					top.TYPO3.Guide.startTourWithStep(tour, stepNo);
 				}
 				else {
-					top.TYPO3.Guide.startTour(tour);
+					// Be sure that we start by step 0
+					top.TYPO3.Guide.TourData[tour].currentStepNo = 0;
+					top.TYPO3.Guide.currentTourName = tour;
+					jQuery.ajax({
+						dataType: 'json',
+						url: TYPO3.settings.ajaxUrls['GuideController::ajaxRequest'],
+						data: {
+							cmd: 'setStepNo',
+							tour: tour,
+							stepNo: 0
+						},
+						success: function (result) {
+							Logger.log('SET STEP: ', result);
+							if(typeof result['cmd']['setStepNo'] != 'undefined') {
+								var tour = result.cmd.setStepNo.tour;
+								top.TYPO3.Guide.startTour(tour);
+							}
+
+						},
+						error: function (result) {
+							Logger.error('Upps, an error occured. Message was: ', result);
+						}
+
+					});
 				}
 				return false;
 			});
@@ -296,7 +314,6 @@ define(['jquery', 'TYPO3/CMS/Guide/BootstrapTourParser', 'TYPO3/CMS/Guide/Logger
 		}
 		// Get module identifier
 		var currentModuleId = top.TYPO3.Guide.getUrlParameterByName('M', window.location.href);
-		//console.error(top.TYPO3.Guide.getUrlParameterByName('M', window.location.href));
 		var isLoggedIn =  top.TYPO3.Guide.getUrlParameterByName('token', window.location.href) !== null || currentModuleId !== null;
 		// Logged in and in top frame
 		if(isLoggedIn && !inFrame) {
@@ -328,10 +345,31 @@ define(['jquery', 'TYPO3/CMS/Guide/BootstrapTourParser', 'TYPO3/CMS/Guide/Logger
 			//top.TYPO3.Guide.end();
 			// Current identifier
 			top.TYPO3.Guide.currentModule = currentModuleId;
-			top.TYPO3.Guide.currentTourName = '';
+			// Reset current tour
+			if(currentModuleId == 'help_GuideGuide') {
+				top.TYPO3.Guide.currentTourName = '';
+			}
+
+			// Restart a tour
+			else if(typeof top.TYPO3.Guide.restartTourName != 'undefined' && top.TYPO3.Guide.restartTourName != '') {
+				// First! End some tours
+				top.TYPO3.Guide.Tours.Menu.end();
+				top.TYPO3.Guide.Tours.Tree.end();
+				top.TYPO3.Guide.Tours.Topbar.end();
+				// Now grab the reminded tour.
+				top.TYPO3.Guide.currentTourName = top.TYPO3.Guide.restartTourName;
+				top.TYPO3.Guide.restartTourName = '';
+				Logger.log('Restart: ', top.TYPO3.Guide.currentTourName);
+			}
+
+
+		//	top.TYPO3.Guide.currentTourName = '';
 			if(typeof(top.TYPO3.Guide.TourData) !== 'undefined') {
 				Logger.log('frame: tourdata is available', top.TYPO3.Guide.TourData);
-				top.TYPO3.Guide.getTourNameByModuleName();
+				Logger.log('frame: start currentTourname', top.TYPO3.Guide.currentTourName);
+				if((top.TYPO3.Guide.currentTourName == '' || typeof top.TYPO3.Guide.currentTourName == 'undefined') && currentModuleId == 'help_AboutAboutmodules') {
+					top.TYPO3.Guide.getTourNameByModuleName();
+				}
 				Logger.log('currentModule: ', top.TYPO3.Guide.currentModule);
 				Logger.log('currentTourName: ', top.TYPO3.Guide.currentTourName);
 				/**

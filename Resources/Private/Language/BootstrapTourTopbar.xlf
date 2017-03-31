@@ -7,7 +7,7 @@
 				<source>Topbar</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.description">
-				<source>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</source>
+				<source>This tour gives you an introduction of the topbar.</source>
 			</trans-unit>
 
 			<trans-unit id="tx_guide_tour.10.title">
@@ -28,7 +28,7 @@
 				<source>Help menu</source>
 			</trans-unit>
 			<trans-unit id="tx_guide_tour.30.content">
-				<source><![CDATA[The help menu contains different helping modules.]]></source>
+				<source><![CDATA[The help menu contains different helping modules.<br />Here you will find also the guided tours modules, where you can restart each tours and can explore many other tours.]]></source>
 			</trans-unit>
 
 			<trans-unit id="tx_guide_tour.40.title">

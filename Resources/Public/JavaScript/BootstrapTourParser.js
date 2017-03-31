@@ -72,6 +72,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 
 			//
 			storage: false,
+			autoscroll: true,
 
 			/**
 			 * Function to execute when the tour starts.
@@ -109,7 +110,7 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 			 * Function to execute right after the step is shown.
 			 * @param tour
 			 */
-			onShown:    function(tour) {
+			onShown: function(tour) {
 				var stepIndex = tour.getCurrentStep();
 				var stepIdentifier = '.tour-' + tour._options.name + '.tour-' + tour._options.name + '-' + stepIndex;
 				jQuery(stepIdentifier).animate({'opacity': '1'}, 500);
@@ -129,6 +130,28 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 					// Handle requirements which are executed shown the step is shown
 					if(typeof step.shown !== "undefined") {
 						tour._options.handleEvents(step.shown, 'onShown', tour, step);
+					}
+					// Remind the next tour, so we're able
+					// to load it in a different frame
+					if(typeof step.nextStep !== "undefined") {
+						if(step.nextStep.tour != 'Menu' && step.nextStep.tour != 'Tree' && step.nextStep.tour!='Topbar') {
+							top.TYPO3.Guide.restartTourName = step.nextStep.tour;
+							// Set step in backend
+							jQuery.ajax({
+								dataType: 'json',
+								url: TYPO3.settings.ajaxUrls['GuideController::ajaxRequest'],
+								data: {
+									cmd: 'setStepNo',
+									tour: step.nextStep.tour,
+									stepNo: parseInt(step.nextStep.step, 10)
+								}
+							});
+							Logger.log('restartTourName: ', top.TYPO3.Guide.restartTourName, ', at: ', parseInt(step.nextStep.step, 10));
+						}
+					}
+					else {
+						top.TYPO3.Guide.restartTourName = '';
+						Logger.log('restartTourName: unset from tour ', tour._options.name);
 					}
 				}
 			},
@@ -173,13 +196,25 @@ define(['jquery', 'TYPO3/CMS/Guide/Logger'], function (jQuery, Logger) {
 						}
 					});
 				}
+				// Unset the current step in backend
+				if(tour._options.name!='Tree' && tour._options.name!='Menu' && tour._options.name!='Topmenu') {
+					jQuery.ajax({
+						dataType: 'json',
+						url: TYPO3.settings.ajaxUrls['GuideController::ajaxRequest'],
+						data: {
+							cmd: 'setStepNo',
+							tour: tour._options.name,
+							stepNo: 0
+						}
+					});
+				}
 			},
 
 			/**
 			 * Function to execute when next step is called.
 			 * @param tour
 			 */
-			onNext:     function(tour) {
+			onNext: function(tour) {
 				var stepIndex = tour.getCurrentStep();
 				var step = tour.getStep(stepIndex);
 				Logger.log('onNext: ', typeof step.nextStep !== "undefined", ', tour:', tour, ', step:', step);

@@ -95,6 +95,7 @@ title = Welcome to TYPO3 backend
 # You're also be able to use HTML tags like i, u, b, br or p. Additionally there is an img tag for displaying icons, 
 # which must have a data-icon-identifier attribute with the icon identifier. Such an icon usage could look like:
 # <img data-icon-identifier="module-web_layout"/>
+# There is a <action> tag, which allows you the define actions for the user, which will be designed noticable.
 # All other tags are disallowed.
 content (
  This tour will show you the first steps within TYPO3.<br />

@@ -1,40 +1,70 @@
+1:
+  selector:  '#menu'
+  title:     Module menu
+  content:   This is the module menu. Here you will find all modules, excluding the help modules.
+  placement: right
+  click:
+    selector: '#menu'
+2:
+  selector:  button.t3js-topbar-button-modulemenu
+  title:     Module menu
+  content:   This is the module menu button, which let's you the menu collapse and expand.
+  placement: bottom
+  click:
+    selector: button.t3js-topbar-button-modulemenu
 10:
   selector:  span[data-identifier='module-web_layout']
   title:     Page module
-  content:   <img data-icon-identifier="module-web_layout"/> This is the button which opens the page module.<br />You will use it for editing you content.<br />Click on <i>Next</i> for jumping into the page module.
+  content:   This is the page module.<br />You will use it for editing you content..
   placement: bottom
-  shown:
-    renameNextButton: Go to page module
-  next:
-    tour: PageModule
-    step: 0
+  click:
+    selector: span[data-identifier='module-web_layout']
 20:
-  selector:  '#web_ViewpageView'
+  selector:  span[data-identifier='module-web_ViewpageView']
   title:     View module
-  content:   This is the view module.
+  content:   This is the view module where you can get a preview of your web pages.
   placement: right
-  shown:
-    renameNextButton: Go to page module
-  next:
-    tour: ViewModule
-    step: 0
+  click:
+    selector: span[data-identifier='module-web_ViewpageView']
 30:
-  selector:  '#web_func'
-  title:     Function module
-  content:   This is the function module.
+  selector:  span[data-identifier='module-web_info']
+  title:     View module
+  content:   This is the information module where you can get a lot of different information about your web pages.
   placement: right
-  shown:
-    renameNextButton: Go to function module
+  click:
+    selector: span[data-identifier='module-web_info']
+40:
+  selector:  span[data-identifier='module-web_func']
+  title:     Function module
+  content:   This is the function module where you are able to perform different functions.
+  placement: right
+  click:
+    selector: span[data-identifier='module-web_func']
   next:
-    tour: FunctionModule
-    step: 0
+    tour: AboutModule
+    stepByKey: end
+#
+#
+# Show the Page module menu button
+page-module-button-create-page-by-page-tree-context-menu:
+  selector:  span[data-identifier='module-web_layout']
+  title:     Page module
+  content:   We are using the page module for creating the new web page.
+  placement: bottom
+  next:
+    tour: Tree
+    stepByKey: page-module-page-create-page-by-page-tree-context-menu
+  click:
+    selector: span[data-identifier='module-web_layout']
+#
+# Show the TypoScript module menu button
 template-module-button:
   selector:  span[data-identifier='module-web_ts']
   title:     Template module
-  content:   Here you will find the TypoScript Template Module
+  content:   Click this button in the module menu, in order to open the TypoScript Module.
   placement: right
-  #shown:
-  #  renameNextButton: Go to function module
+  shown:
+    renameNextButton: Go to TypoScript module
   next:
     tour: Tree
     stepByKey: template-module-root-page-description

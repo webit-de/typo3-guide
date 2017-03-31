@@ -44,7 +44,7 @@ body > .popover .dont-show-again label {
 }
 .typo3-guide-module .container-fluid .tour-item {
 	margin-bottom: 20px;
-	min-height: 250px;
+	min-height: 150px;
 }
 .typo3-guide-module hr {
 	border-top: 1px solid #7a7a7a;

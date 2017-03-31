@@ -1,0 +1,25 @@
+10:
+  selector:  .module-docheader
+  title:     Create a new page
+  content:   This tour shows how to create a new page by using the context menu of the page tree.
+  placement: bottom
+  showArrow: false
+  next:
+    tour: Menu
+    stepByKey: page-module-button-create-page-by-page-tree-context-menu
+edit-page-properties:
+  selector:  input[data-formengine-input-name^="data[pages]"][data-formengine-input-name$="[title]"]
+  title:     Create a new page
+  content:   Now you have to enter at least the page title.
+  placement: top
+  showArrow: true
+edit-page-save:
+  selector:  div.btn-group.t3js-splitbutton
+  title:     Create a new page
+  content:   Finally you have to save the new page.
+  placement: bottom
+  showArrow: true
+  shown:
+    addClass:
+      selector: '#popover-button-next'
+      class: hidden

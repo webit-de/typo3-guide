@@ -1,34 +1,65 @@
 10:
-  selector:  div.x-tree-root-node:first
+  selector:  div.x-tree-node-el:first
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.10.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.10.content
-  placement: bottom
+  placement: top
+  click:
+    selector: div.x-tree-node-el:first
 20:
-  selector:  #typo3-pagetree-topPanel-button-newNode
+  selector:  span[data-identifier='actions-page-new']
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.20.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.20.content
   placement: bottom
-
+  click:
+    selector: span[data-identifier='actions-page-new']
+  shown:
+    addClass:
+      selector: li[data-toolbar-identifier='clear-cache-toolbar-item']
+      class:    active
 30:
-  selector:  #typo3-pagetree-topPanel-button-filter
+  selector:  span[data-identifier='actions-filter']
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.30.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.30.content
   placement: bottom
+  click:
+    selector:  span[data-identifier='actions-filter']
 40:
-  selector:  #typo3-pagetree-topPanel-button-refresh
+  selector:  span[data-identifier='actions-refresh']
   title:     LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.40.title
   content:   LLL:EXT:guide/Resources/Private/Language/BootstrapTourTree.xlf:tx_guide_tour.40.content
   placement: bottom
-50:
-  selector:  .icon-actions-document-view
-  title:     View webpage
-  content:   Click this button for displaying the webpage in a new tab.<br /><br />Click on <i>End tour</i> in order to get back to the guides startpage.
-  placement: bottom
-  shown:
-    renameNextButton: Start next tour
+  click:
+    selector:  span[data-identifier='actions-refresh']
+#50:
+#  selector:  .icon-actions-document-view
+#  title:     View webpage
+#  content:   Click this button for displaying the webpage in a new tab.<br /><br />Click on <i>End tour</i> in order to get back to the guides startpage.
+#  placement: bottom
+#  shown:
+#    renameNextButton: Start next tour
+#  next:
+#    tour: ViewModule
+#    step: 0
+#
+#
+page-module-page-create-page-by-page-tree-context-menu:
+  selector:  div.x-tree-node-el:eq(1)
+  title:     Page tree
+  content:   <action>Click on the <img data-icon-identifier="module-web"/> icon (not on the title!) of any existing page and choose the <img data-icon-identifier="actions-document-new"/> <i>New</i> from the context menu.</action>
+  placement: left
   next:
-    tour: ViewModule
-    step: 0
+    tour: CreatePageByPageTreeContextMenu
+    stepByKey: edit-page-properties
+  click:
+    selector: div.x-tree-node-el:eq(1) .icon-markup
+  shown:
+    addClass:
+      selector: '#popover-button-next'
+      class: hidden
+#
+#
+# This is a part of the template module tour
+# It tells the user, that he will find an template overview on the root page
 template-module-root-page-description:
   selector:  div.x-tree-node-el:first
   title:     Page tree
@@ -39,10 +70,14 @@ template-module-root-page-description:
 template-module-root-page-description-1:
   selector:  div.x-tree-node-el:eq(1)
   title:     Page tree
-  content:   Use another page to create a new TypoScript template or modify an existing. Click on this page to resume!
+  content:   Use another page to create a new TypoScript template or modify an existing.<br /><action>Click on this page to resume!</action>
   placement: bottom
   next:
     tour: TemplateModule
-    step: 1
+    stepByKey: 20
   click:
     selector: div.x-tree-node-el:eq(1)
+  shown:
+    addClass:
+      selector: '#popover-button-next'
+      class: hidden

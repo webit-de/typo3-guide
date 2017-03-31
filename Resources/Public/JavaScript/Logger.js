@@ -2,7 +2,7 @@ define([], function () {
 
     function CustomLogger() {
         this._options = {
-            disabled: false
+            disabled: true
         }
     }
 

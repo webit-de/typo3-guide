@@ -233,8 +233,10 @@ class GuideUtility
                     // Prepare content
                     // Strip all tags an attributes and insert icons by identifier
                     $content = $tour['steps'][$stepKey]['content'];
-                    $icons = array();
-                    $allowedTags = array('<p>', '<i>', '<u>', '<b>', '<br>', '<img>');
+                    $icons = array(
+                        '<statusdialogwarning>' => 'status-dialog-warning'
+                    );
+                    $allowedTags = array('<p>', '<i>', '<u>', '<b>', '<br>', '<img>', '<action>');
                     if(preg_match_all("/<img\s(.+?)\/>/is", $tour['steps'][$stepKey]['content'], $replacements)) {
                         foreach($replacements[0] as $icon) {
                             $iconTag = '';
@@ -251,6 +253,9 @@ class GuideUtility
                     // Cleanup HTML
                     $allowedTags = implode('', $allowedTags);
                     $content = SanitizationService::sanitizeHtml($content, $allowedTags);
+                    // Parse user actions
+                    $content = str_replace('<action>', '<br /><div class="text-warning"><statusdialogwarning> ', $content);
+                    $content = str_replace('</action>', '</div>', $content);
                     // Insert icons by IconFactory
                     if(count($icons)>0) {
                         /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
