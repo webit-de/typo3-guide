@@ -7,7 +7,7 @@
   "license": ["GPL-2.0+"],
   "keywords": ["TYPO3 CMS", "TYPO3 Guide", "Guide"],
   "require": {
-    "typo3/cms-core": "~8.6.0|<8.7"
+    "typo3/cms-core": ">=8.6.1 <9"
   },
   "support": {
     "issues": "https://github.com/tdeuling/typo3-guide/issues"
