@@ -72,8 +72,12 @@ class GuideController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
         if (!($this->guideUtility instanceof \Tx\Guide\Utility\GuideUtility)) {
             $this->guideUtility = GeneralUtility::makeInstance('Tx\Guide\Utility\GuideUtility');
         }
+        // Extension configuration
+        $configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['guide']);
         // Process command
-        $result = array();
+        $result = [
+            'debug' => (bool)$configuration['debug']
+        ];
         switch ($cmd) {
             case 'disableTour':
                 if ($this->guideUtility->tourExists($tour)) {

@@ -1,5 +1,9 @@
 ## Guided tours Change-Log
 
+### 2017-09-25  Thomas Deuling  <typo3@coding.ms>
+
+*	[FEATURE] Adding Extension manager debug setting for activating debug output in JavaScript console.
+
 ### 2017-03-27  Thomas Deuling  <typo3@coding.ms>
 
 *	[FEATURE] Placement now allows the value auto, which automatically identify the best placement.
