@@ -1,21 +1,22 @@
 # Guided tours for TYPO3
-The guided tour extension ([EXT:guide](https://typo3.org/extensions/repository/view/guide)) for TYPO3 provides you the ability for creating guided tours through the TYPO3 backend. These
-tours should give editors an introduction of different areas and features, so that he easily finds out who to use TYPO3.
 
-The different guided tours are configured by page TypoScript (tsconfig). Translation values are provided as usually by 
-XLIFF files.
+The guided tour extension ([EXT:guide](https://typo3.org/extensions/repository/view/guide)) for TYPO3 provides you the ability for creating guided tours through the TYPO3 backend. These
+tours should give editors an introduction of different areas and features, so that he easily finds out how to use TYPO3.
 
 Developers of third party extensions have the ability to provide own guided tours for their backend modules.
 
+All tours may be modified via TSconfig, to support different use cases for different backend groups.
+
+![Example Tour](./Documentation/guide-example.png)
+
 ## Backend module
+
 The guided tour extension comes with an own backend module, which you will find in the *help menu* in the *topbar* of
 the TYPO3 backend. It will list you all (for your current user accessible) guided tours. You're able to start each tour
 or resume tours which you have started once. Additionally you're able to reactivate tours, that you had marked as *Don't 
 show again*.
 
-
-Let's take a look at how the guided tours work in detail and how you're able to modify existing tours or
-create your own.
+![Guide Module](./Documentation/guide-module.png)
 
 ## Definition of a guided tour
 
