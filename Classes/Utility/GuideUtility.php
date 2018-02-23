@@ -103,6 +103,14 @@ class GuideUtility
         if(count($tours) >0) {
             foreach ($tours as $tourKey => $tour) {
                 $tour['name'] = $tourKey;
+
+                // Check if tour should be hidden from the user, or if
+                // requested tour module is not enabled for current user
+                if (false === empty($tours[$tourKey]['hide']) || false === $this->moduleEnabled($tour['moduleName'])) {
+                  unset($tours[$tourKey]);
+                  continue;
+                }
+
                 // Merge user configuration
                 if (isset($backendUser->uc['moduleData']['guide'][$tour['name']])) {
                     $tours[$tour['name']] = array_merge($tour,
@@ -127,12 +135,6 @@ class GuideUtility
                 }
                 $tours[$tourKey]['stepsCount'] = count($tours[$tourKey]['steps']);
                 unset($tours[$tourKey]['steps']);
-
-                // Check if requested module is enabled for current user
-                if (!$this->moduleEnabled($tour['moduleName'])) {
-                    // …if not, remove that tour
-                    unset($tours[$tourKey]);
-                }
             }
         }
         return $tours;
