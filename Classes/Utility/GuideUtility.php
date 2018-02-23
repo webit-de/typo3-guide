@@ -110,14 +110,15 @@ class GuideUtility
                 } else {
                     $tours[$tour['name']] = $tour;
                 }
-                // Be sure disabled is available
+
+                // Be sure disabled key is available
                 if (!isset($tours[$tourKey]['disabled'])) {
                     $tours[$tourKey]['disabled'] = false;
                 }
-                // Title and description
+                // Set title and description
                 $tours[$tourKey]['title'] = $this->translate($tours[$tourKey]['title']);
                 $tours[$tourKey]['description'] = $this->translate($tours[$tourKey]['description']);
-                // Generate an id
+                // Generate a tour id for assets
                 $tours[$tourKey]['id'] = GeneralUtility::camelCaseToLowerCaseUnderscored($tour['name']);
                 $tours[$tourKey]['id'] = 'guide-tour-' . str_replace('_', '-', $tours[$tourKey]['id']);
                 // Remove steps
@@ -126,9 +127,10 @@ class GuideUtility
                 }
                 $tours[$tourKey]['stepsCount'] = count($tours[$tourKey]['steps']);
                 unset($tours[$tourKey]['steps']);
-                // Tour/Module is enabled for current user
+
+                // Check if requested module is enabled for current user
                 if (!$this->moduleEnabled($tour['moduleName'])) {
-                    // ..if not, remove that tour!
+                    // …if not, remove that tour
                     unset($tours[$tourKey]);
                 }
             }
@@ -137,7 +139,8 @@ class GuideUtility
     }
 
     /**
-     * Passed module is enabled for current backend user?
+     * Check if current backend user is allowed to access the passed module of the tour
+     *
      * @param $moduleName
      * @return bool
      */
@@ -145,31 +148,29 @@ class GuideUtility
     {
         $enabled = false;
         $backendUser = $this->getBackendUserAuthentication();
-        if ($backendUser->isAdmin()) {
-            $enabled = true;
-        } else {
-            if ($moduleName === 'core') {
-                $enabled = true;
-            } else {
-                if (!($this->backendModuleRepository instanceof BackendModuleRepository)) {
-                    $this->backendModuleRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Domain\\Repository\\Module\\BackendModuleRepository');
-                }
-                $modules = $this->backendModuleRepository->loadAllowedModules();
-                /** @var \TYPO3\CMS\Backend\Domain\Model\Module\BackendModule $module */
-                foreach ($modules as $module) {
-                    $children = $module->getChildren();
-                    if (!empty($children)) {
-                        /** @var \TYPO3\CMS\Backend\Domain\Model\Module\BackendModule $child */
-                        foreach ($children as $child) {
-                            if ($moduleName === $child->getName()) {
-                                $enabled = true;
-                                break(2);
-                            }
-                        }
-                    }
-                }
-            }
+
+        if ($moduleName === 'core' || $backendUser->isAdmin()) {
+            return true;
         }
+
+        if (!($this->backendModuleRepository instanceof BackendModuleRepository)) {
+          $this->backendModuleRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Domain\\Repository\\Module\\BackendModuleRepository');
+        }
+        $modules = $this->backendModuleRepository->loadAllowedModules();
+        /** @var \TYPO3\CMS\Backend\Domain\Model\Module\BackendModule $module */
+        foreach ($modules as $module) {
+          $children = $module->getChildren();
+          if (!empty($children)) {
+            /** @var \TYPO3\CMS\Backend\Domain\Model\Module\BackendModule $child */
+            foreach ($children as $child) {
+              if ($moduleName === $child->getName()) {
+                $enabled = true;
+                break 2;
+              }
+            }
+          }
+        }
+
         return $enabled;
     }
 
@@ -335,7 +336,9 @@ class GuideUtility
     }
 
     /**
-     * Set a tour as disabled
+     * Let user disable a tour (“Dont show again”).
+     * Tour will still be available in the list.
+     *
      * @param string $tourName Name of the guided tour
      * @param bool $disabled Disabled true/false
      * @return array
