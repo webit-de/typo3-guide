@@ -1,37 +1,86 @@
 # Guided tours for TYPO3
-The guided tour extension ([EXT:guide](https://typo3.org/extensions/repository/view/guide)) for TYPO3 provides you the ability for creating guided tours through the TYPO3 backend. These
-tours should give editors an introduction of different areas and features, so that he easily finds out who to use TYPO3.
 
-The different guided tours are configured by page TypoScript (tsconfig). Translation values are provided as usually by 
-XLIFF files.
+The guided tour extension ([EXT:guide](https://typo3.org/extensions/repository/view/guide)) for TYPO3 provides you the ability for creating guided tours through the TYPO3 backend. These
+tours should give editors an introduction of different areas and features, so that he easily finds out how to use TYPO3.
 
 Developers of third party extensions have the ability to provide own guided tours for their backend modules.
 
+All tours may be modified via TSconfig, to support different use cases for different backend groups.
+
+![Example Tour](./Documentation/guide-example.png)
+
 ## Backend module
+
 The guided tour extension comes with an own backend module, which you will find in the *help menu* in the *topbar* of
 the TYPO3 backend. It will list you all (for your current user accessible) guided tours. You're able to start each tour
 or resume tours which you have started once. Additionally you're able to reactivate tours, that you had marked as *Don't 
 show again*.
 
+![Guide Module](./Documentation/guide-module.png)
 
-Let's take a look at how the guided tours work in detail and how you're able to modify existing tours or
-create your own.
+## Add a new tour
 
-## Definition of a guided tour
+A new tour should be registered within an extension. It is also possible to create tours with pure TSconfig only,
+but discouraged, since parsing the TSconfig files is slow and not as flexible.
 
-All tours must defined in the page TypoScript node `mod.guide.tours`. A definition of a tour for the *View* module would
-be like this:
+Register a tour in the `ext_localconf.php` file in your extension:
+ 
+```php
+\Tx\Guide\Utility\GuideUtility::addTour(
+	'MyExtensionModuleTour',
+	'LLL:EXT:myextension/Resources/Private/Language/MyExtensionModuleTour.xlf:title',
+	'LLL:EXT:myextension/Resources/Private/Language/MyExtensionModuleTour.xlf:description',
+	'web_ts',
+	'module-web_ts',
+	'EXT:myextension/Configuration/Tours/'
+);
+```
+
+The `\Tx\Guide\Utility\GuideUtility::addTour` method requires the following parameters:
+
+1.	The tour identifier. Should be a upper-camel-cased string, and unique (eg. prepend extension name)
+2.	The title for the tour. This can be a localization identifier too.
+3.	The description for the tour. This can be a localization identifier too.
+3.	The Module-Key of the tour. This is the same like the `m`-Parameter of the Module.
+4.	The icon identifier for the tour. See [TYPO3.Icons](https://github.com/TYPO3/TYPO3.Icons) for available icons or how to register your own.
+5.	The base path for your *.yaml configuration files for the tour. 
+
+*Note:* All settings in the YAML may be modified with overwrites in the Page-TSconfig
+or User-TSconfig.
+
+## Modify existing tours 
+
+All registered tours are stored below the node `mod.guide.tours`. 
+
+To add a tour with TSconfig only, you could use the following example as well:
 
 ```
-mod.guide.tours.ViewModule {
+mod.guide.tours.MySpecialModuleTour {
 	# here comes your guided tour configuration
 }
 ```
 
->	The main node of a tour is the internal name as well.
->	This name should be a simple upper-camel-cased string.
+To modify an existing tour, you therefore just need to add option values below the module identifier.
 
-Within this tour node we need some required nodes, which can be defined like this:
+The guide extension provides some example tours. If you want the second popover 
+of the *ViewModule* tour append on the *right* instead of the *bottom*, you would 
+insert the following configuration into your TSconfig:
+
+```
+mod.guide.tours.ViewModule {
+	steps.20.placement = right
+}
+```
+
+## Configuration
+
+### Tour
+
+As explained before, the configuration should be done in YAML, but may be 
+modified in TSconfig. The following description is done for TSconfig, but the 
+options are the same.
+
+Each *tour* node can be configured like this:
 
 ```
 mod.guide.tours.ViewModule {
@@ -72,74 +121,76 @@ mod.guide.tours.ViewModule {
 	stepsConfiguration = EXT:guide/Configuration/Tours/
 ```
 
-### Step configuration
+### Steps
+
 Each *step* node can be configured like this:
 
 ```
-# The selector is passed to jQuery for selecting the HTML-Element, on which the popover should be placed.
-# This selector must be unique in DOM. A selector can also be a unique data attribute/value.
-# Examples:
-# selector = #some-id
-# selector = .some-unique-class
-# selector = .some-multiple-used-class:first
-# selector = select[name=\'WebFuncJumpMenu\']:first
-# selector = [data-identifier='apps-toolbar-menu-shortcut']
-selector = .typo3-aboutmodules-inner-docbody
-# This is the title of the popover.
-# Enter simply some text or a LLL identifier like:
-# title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourPageModule.xlf:tx_guide_tour.0.title
-title = Welcome to TYPO3 backend
-# This is the content of the popover.
-# Enter simply some text or a LLL identifier like:
-# title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourPageModule.xlf:tx_guide_tour.0.content
-# You're also be able to use HTML tags like i, u, b, br or p. Additionally there is an img tag for displaying icons, 
-# which must have a data-icon-identifier attribute with the icon identifier. Such an icon usage could look like:
-# <img data-icon-identifier="module-web_layout"/>
-# There is a <action> tag, which allows you the define actions for the user, which will be designed noticable.
-# All other tags are disallowed.
-content (
- This tour will show you the first steps within TYPO3.<br />
- You're starting here in the <img data-icon-identifier="module-help_AboutAboutmodules"/> <i>about</i> module, 
- which shows you your available modules. 
- This modules are related on the giving user authorisation.<br />
- <br />
- Click on <i>Next</i> for an introduction of the topbar of TYPO3.<br />
- <br />
- <i>(You can restart each tour by the guided tours module.)</i>
-)
-# Defines the position of the popover.
-# Possible values are: top, bottom, left, right, auto
-placement = top
-# Disables the arrow on popover.
-# The arrow is displayed by default.
-showArrow = false
-# Enables a backdrop.
-# This feature is currently in incubation
-backdrop = false
-# Set a padding for the backdrop
-backdropPadding = 0
-#
-# The following nodes can be used for executing some actions during the tour. 
-#
-# The next node contains actions, which are triggered by clicking the next button
-next {
-	# More information below...
-}
-# The show node contains actions, which are triggered by starting to show this step
-show {
-	# More information below...
-}
-# The shown node contains actions, which are triggered by finishing to show this step
-shown {
-	# More information below...
-}
-# The hide node contains actions, which are triggered by hiding a step
-hide {
-	# More information below...
-}
+	# The selector is passed to jQuery for selecting the HTML-Element, on which the popover should be placed.
+	# This selector must be unique in DOM. A selector can also be a unique data attribute/value.
+	# Examples:
+	# selector = #some-id
+	# selector = .some-unique-class
+	# selector = .some-multiple-used-class:first
+	# selector = select[name=\'WebFuncJumpMenu\']:first
+	# selector = [data-identifier='apps-toolbar-menu-shortcut']
+	selector = .typo3-aboutmodules-inner-docbody
+	# This is the title of the popover.
+	# Enter simply some text or a LLL identifier like:
+	# title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourPageModule.xlf:tx_guide_tour.0.title
+	title = Welcome to TYPO3 backend
+	# This is the content of the popover.
+	# Enter simply some text or a LLL identifier like:
+	# title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourPageModule.xlf:tx_guide_tour.0.content
+	# You're also be able to use HTML tags like i, u, b, br or p. Additionally there is an img tag for displaying icons, 
+	# which must have a data-icon-identifier attribute with the icon identifier. Such an icon usage could look like:
+	# <img data-icon-identifier="module-web_layout"/>
+	# There is a <action> tag, which allows you the define actions for the user, which will be designed noticable.
+	# All other tags are disallowed.
+	content (
+	 This tour will show you the first steps within TYPO3.<br />
+	 You're starting here in the <img data-icon-identifier="module-help_AboutAboutmodules"/> <i>about</i> module, 
+	 which shows you your available modules. 
+	 This modules are related on the giving user authorisation.<br />
+	 <br />
+	 Click on <i>Next</i> for an introduction of the topbar of TYPO3.<br />
+	 <br />
+	 <i>(You can restart each tour by the guided tours module.)</i>
+	)
+	# Defines the position of the popover.
+	# Possible values are: top, bottom, left, right, auto
+	placement = top
+	# Disables the arrow on popover.
+	# The arrow is displayed by default.
+	showArrow = false
+	# Enables a backdrop.
+	# This feature is currently in incubation
+	backdrop = false
+	# Set a padding for the backdrop
+	backdropPadding = 0
+	#
+	# The following nodes can be used for executing some actions during the tour. 
+	#
+	# The next node contains actions, which are triggered by clicking the next button
+	next {
+		# More information below...
+	}
+	# The show node contains actions, which are triggered by starting to show this step
+	show {
+		# More information below...
+	}
+	# The shown node contains actions, which are triggered by finishing to show this step
+	shown {
+		# More information below...
+	}
+	# The hide node contains actions, which are triggered by hiding a step
+	hide {
+		# More information below...
+	}
 ```
 
-### The next node
+#### Next node
+
 The *next* node contains actions, which are triggered by clicking the next button. So you're able to trigger another tour
 in the last popover, just by clicking the next button.
 
@@ -154,11 +205,13 @@ step = 0
 stepByKey = step-key-by-key-name
 ```
 
-### The show node
+#### Show node
+
 The *show* node contains actions, which are triggered by starting to show this step. This means in detail, the action is
 executed **before** the tour starts the displaying process.
 With help of this node you're able to execute actions, like adding or removing a CSS class to an element or open select 
 boxes in order to show specific values.
+
 ```
 # Renames the label of the next button of the popover.
 # This is useful, when you're starting another tour by clicking the next button.
@@ -185,101 +238,29 @@ openSelectBox {
 }
 ```
 
-### The shown node
+#### Shown node
 The *shown* node contains actions, which are triggered by finishing to show this step. This means in detail, the action is
 executed **after** the popover is completely visible. The available actions in this nodes are equal to the *show* node.
 
-### The hide node
+#### Hide node
 The *hide* node contains actions, which are triggered by hiding a step. The available actions in this nodes are equal to 
 the *show* node.
 
+### Create different steps for different Major versions of TYPO3
 
-## Modify existing tours or create your own
-Since guided tours are defined by simple page TypoScript (tsconfig), the modifying of an existing tour or creating a new
-tour can be done in different ways.
+By providing your step configuration using YAML files, you're able to use different steps for different TYPO3
+versions. Just adjust the base folder of your *.yaml files in the registration.
 
-*	If you want to provide a tour with your own extension or extension-theme, just create a page TypoScript file in your favorite location,
-	for example in `EXT:your_ext/Configuration/PageTS/GuidedTour.pagets`. This file needs to be included by your
-	`ext_localconf.php`:
-	
-	```
-	<?php
-	if (!defined('TYPO3_MODE')) {
-		die('Access denied.');
-	}
-	if (TYPO3_MODE === 'BE') {
-		// Add page typoscript tours
-		\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-			'<INCLUDE_TYPOSCRIPT: source="FILE:EXT:' . $_EXTKEY . '/Configuration/PageTS/GuidedTour.pagets">'
-		);
-	}
-	```
-	
-	These configuration file contains all your modifications of a existing tour or a definition of a new guided tour.
-*	If you don't have an own extension, you are able to modify a tour by user TypoScript. You can do this by adding the
-	changes directly within the respective user or, if you want to change tours for multiple users, within a backend
-	user group - so you're able to assign the same tours/tour modifications to multiple users.
-
-### Modification example
-For example, if you want the second popover of the *ViewModule* tour append on the *right* instead of the *bottom*,
-you would insert a TypoScript like that:
+Example base path:
 
 ```
-mod.guide.tours.ViewModule {
-	steps.20.placement = right
-}
+EXT:your_ext/Configuration/Tours/
 ```
 
-In the same way you're able to provide new defined guided tours.
-
-
-## Adding new tours by using PHP
-Since version 2.0.0 you're able to define new tours by PHP. The advantage of this is, that you can outsource the step
-configuration into external yaml-files and the Page-TypoScript isn't so overloaded by processing all the steps again and
-again. This definition can be done by a short entry in your `ext_localconf.php`. This could look like:
-
-```php
-\Tx\Guide\Utility\GuideUtility::addTour(
-	'TemplateModule',
-	'LLL:EXT:guide/Resources/Private/Language/BootstrapTourTemplateModule.xlf:tx_guide_tour.title',
-	'LLL:EXT:guide/Resources/Private/Language/BootstrapTourTemplateModule.xlf:tx_guide_tour.description',
-	'web_ts',
-	'module-web_ts',
-	'EXT:guide/Configuration/Tours/'
-);
-
-```
-
-The `\Tx\Guide\Utility\GuideUtility::addTour` required the following parameters:
-
-1.	The tour identifier equally to the definition by Page-TypoScript.
-2.	The title for the tour. This can be a localization identifier too.
-3.	The description for the tour. This can be a localization identifier too.
-3.	The Module-Key of the tour. This is the same like the `m`-Parameter of the Module.
-4.	The Icon-Identifier for the tour
-5.	The base path for your *.yaml configuration files. By using this *addTour* method the *.yaml files contain the step
-	configuration of the tour
-
->	*Note:*
->
->	When you're defining your tours by this way, you're still able to overwrite your tour in Page-TypoScript (tsconfig)
->	or User-TypoScript. This behaves like descripted above. 
-
-
-
-## Create different steps for different Major versions of TYPO3
-By providing your step configuration by using YAML files, you're able to use different steps for different TYPO3
-versions. Just set the `stepsConfiguration` setting in your tour configuration on the base folder of your *.yaml files,
-as you've seen in *Adding tours by using PHP*. In our tours we set it for example to:
-
-```text
-EXT:guide/Configuration/Tours/
-```
-
-Now this base folder needs some sub folder in which the tours for the different TYPO3 versions are stored. Each folder
+Now this base folder needs some sub folders in which the tours for the different TYPO3 versions are stored. Each folder
 is simply named by the major version number of TYPO3 - for example:
 
-```text
+```
 EXT:your_ext
 - Configuration
   - Tours
@@ -288,6 +269,6 @@ EXT:your_ext
     - TYPO3-x
 ```
 
-In these folders the guided tour searches for YAML files, which have the same name as your tour identifier.
-For example, if you're running a TYPO3 LTS 8.7 and you want to define a tour with identifier `CreatePage`, the
-guided tours extension would search the steps configuration file in `Configuration/Tours/TYPO3-8/CreatePage.yaml`
+In these folders the guide extension searches for YAML files, which have the same name as your tour identifier.
+For example, if you're running a TYPO3 LTS 8.7 and you want to define a tour with identifier `AboutModule`, the
+guided tours extension would search the steps configuration file in `Configuration/Tours/TYPO3-8/AboutModule.yaml`.
