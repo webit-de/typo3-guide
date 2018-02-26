@@ -1,5 +1,5 @@
 {
-  "name": "tdeuling/guide",
+  "name": "codingms/guide",
   "description": "Guides new users through the system. New guided tours can easily be configured by page typoscript.",
   "homepage": "https://github.com/tdeuling/typo3-guide",
   "type": "typo3-cms-extension",
