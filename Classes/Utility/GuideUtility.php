@@ -113,8 +113,11 @@ class GuideUtility
 
                 // Merge user configuration
                 if (isset($backendUser->uc['moduleData']['guide'][$tour['name']])) {
-                    $tours[$tour['name']] = array_merge($tour,
-                        $backendUser->uc['moduleData']['guide'][$tour['name']]);
+                    // Keep original values → no mergeRecursiveWithOverrule() here
+                    $tours[$tour['name']] = array_merge(
+                        $tour,
+                        $backendUser->uc['moduleData']['guide'][$tour['name']]
+                    );
                 } else {
                     $tours[$tour['name']] = $tour;
                 }
