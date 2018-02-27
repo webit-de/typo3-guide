@@ -75,13 +75,26 @@ mod.guide.tours.ViewModule {
 }
 ```
 
+*Note:* The User-TSconfig is always applied, either in a user or a user group. 
+Due to technical reasons the Page-TSconfig is read from page 0 (`root`) only!
+Page-TSconfig stored on any other page wont be recognized by the module.
+
+To add TSconfig to the root page you need to register a file in the 
+`ext_localconf.php` file in your extension:
+
+```php
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+	'<INCLUDE_TYPOSCRIPT: source="FILE:EXT:' . $_EXTKEY . '/Configuration/TSconfig/MyGuidedTour.pagets">'
+);
+```
+
 ## Configuration
 
 ### Tour
 
 As explained before, the configuration should be done in YAML, but may be 
 modified in TSconfig. The following description is done for TSconfig, but the 
-options are the same.
+options are the same as in your YAML file.
 
 Each *tour* node can be configured like this:
 
