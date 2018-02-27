@@ -30,23 +30,26 @@ Register a tour in the `ext_localconf.php` file in your extension:
 	'MyExtensionModuleTour',
 	'LLL:EXT:myextension/Resources/Private/Language/MyExtensionModuleTour.xlf:title',
 	'LLL:EXT:myextension/Resources/Private/Language/MyExtensionModuleTour.xlf:description',
-	'web_ts',
-	'module-web_ts',
+	'web_list',
+	'module-web_list',
 	'EXT:myextension/Configuration/Tours/'
 );
 ```
 
 The `\Tx\Guide\Utility\GuideUtility::addTour` method requires the following parameters:
 
-1.	The tour identifier. Should be a upper-camel-cased string, and unique (eg. prepend extension name)
-2.	The title for the tour. This can be a localization identifier too.
-3.	The description for the tour. This can be a localization identifier too.
-3.	The Module-Key of the tour. This is the same like the `m`-Parameter of the Module.
-4.	The icon identifier for the tour. See [TYPO3.Icons](https://github.com/TYPO3/TYPO3.Icons) for available icons or how to register your own.
-5.	The base path for your *.yaml configuration files for the tour. 
+1. The tour identifier. Should be a upper-camel-cased string, and unique (eg. prepend extension name). The YAML-file needs to have the same name.
+1. The title for the tour. This can be a localization identifier too.
+1. The description for the tour. This can be a localization identifier too.
+1. The module-key of the tour. This is the starting point of the tour, the guide extension will open this module when starting.
+1. The icon identifier for the tour. See [TYPO3.Icons](https://github.com/TYPO3/TYPO3.Icons) for available icons or how to register your own.
+1. The base path for your *.yaml configuration files for the tour. 
 
-*Note:* All settings in the YAML may be modified with overwrites in the Page-TSconfig
-or User-TSconfig.
+Now create a YAML-file. For the example given above, it needs to be stored at 
+`EXT:myextension/Configuration/Tours/MyExtensionModuleTour.yaml`.
+
+*Note:* All settings in the YAML may be modified with overwrites in the 
+Page-TSconfig or User-TSconfig again.
 
 ## Modify existing tours 
 
@@ -60,7 +63,7 @@ mod.guide.tours.MySpecialModuleTour {
 }
 ```
 
-To modify an existing tour, you therefore just need to add option values below the module identifier.
+To modify an existing tour, you therefore just need to add option values below the tour identifier.
 
 The guide extension provides some example tours. If you want the second popover 
 of the *ViewModule* tour append on the *right* instead of the *bottom*, you would 
@@ -86,19 +89,25 @@ Each *tour* node can be configured like this:
 mod.guide.tours.ViewModule {
 	# The title of the tour. This title will be displayed in the backend module.
 	# Enter simply some text or use a LLL identifier.
-	title = LLL:EXT:guide/Resources/Private/Language/BootstrapTourViewModule.xlf:tx_guide_tour.title
+	title = LLL:EXT:myextension/Resources/Private/Language/MyExtensionModuleTour.xlf:guide_tour.title
+
 	# Description of the tour. This description will be displayed in the backend module.
 	# Enter simply some text or use a LLL identifier.
-	description = LLL:EXT:guide/Resources/Private/Language/BootstrapTourViewModule.xlf:tx_guide_tour.description
-	# Internal name of the module.
-	# This is the same identifier like the module key (M parameter in backend links)
-	# The moduleName core is used for tours, which are execute in top frame.
-	# Examples:
+	description = LLL:EXT:myextension/Resources/Private/Language/MyExtensionModuleTour.xlf:guide_tour.description
+
+	# The module key is the starting point of the tour. 
+	# The guide extensions opens the given module when starting a tour. To switch
+	# beetween modules just register another tour.
+	# This is the same name like the `M` parameter in backend links.
+	# Special value: `core` is used for tours which are executed in the top frame.
+	# Example values:
 	# - Page module: web_layout (a tour which is executed in page module)
 	# - View module: web_ViewpageView (a tour which is executed in view module)
+	# - Backend: core (a tour which is executed in the top frame of the backend window)
 	moduleName = core
+
 	# Icon identifier for the icon in backend module.
-	# The icon identifier has to be registered in the icon registry.
+	# See https://github.com/TYPO3/TYPO3.Icons for available icons or how to register your own.
 	iconIdentifier = module-guide-tour-core
 	# In the steps node you have insert a node for each popover you want to display.
 	steps {
